@@ -6,8 +6,25 @@ import {
   ParagraphFeature,
   lexicalEditor,
   UnderlineFeature,
+  OrderedListFeature,
+  UnorderedListFeature,
+  ChecklistFeature,
+  BlockquoteFeature,
+  UploadFeature,
+  EXPERIMENTAL_TableFeature,
+  AlignFeature,
+  HorizontalRuleFeature,
+  SuperscriptFeature,
+  SubscriptFeature,
+  TreeViewFeature,
 } from '@payloadcms/richtext-lexical'
-
+import {
+  BgColorFeature,
+  HighlightColorFeature,
+  TextColorFeature,
+  YoutubeFeature,
+  VimeoFeature,
+} from 'payloadcms-lexical-ext'
 export const defaultLexical: Config['editor'] = lexicalEditor({
   features: () => {
     return [
@@ -43,6 +60,21 @@ export const defaultLexical: Config['editor'] = lexicalEditor({
           ]
         },
       }),
+      OrderedListFeature(),
+      UnorderedListFeature(),
+      ChecklistFeature(),
+      BlockquoteFeature(),
+      UploadFeature(),
+      EXPERIMENTAL_TableFeature(),
+      AlignFeature(),
+      HorizontalRuleFeature(),
+      SuperscriptFeature(),
+      SubscriptFeature(),
+      TextColorFeature(),
+      HighlightColorFeature(),
+      BgColorFeature(),
+      YoutubeFeature(),
+      VimeoFeature(),
     ]
   },
 })

@@ -1,3 +1,4 @@
+import 'payloadcms-lexical-ext/client/client.css'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import {
   DefaultNodeTypes,
@@ -10,9 +11,8 @@ import {
   LinkJSXConverter,
   RichText as RichTextWithoutBlocks,
 } from '@payloadcms/richtext-lexical/react'
-
+import { JSXConverters } from 'payloadcms-lexical-ext'
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
-
 import type {
   BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
@@ -21,6 +21,7 @@ import type {
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { cn } from '@/utilities/ui'
+import { HeadingJSXConverter, ParagraphJSXConverter, TextJSXConverter } from './converters'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -53,6 +54,10 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
     cta: ({ node }) => <CallToActionBlock {...node.fields} />,
   },
+  // ...JSXConverters,
+  ...TextJSXConverter,
+  ...ParagraphJSXConverter,
+  ...HeadingJSXConverter,
 })
 
 type Props = {

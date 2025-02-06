@@ -2,18 +2,35 @@ import type { Field, GroupField } from 'payload'
 
 import deepMerge from '@/utilities/deepMerge'
 
-export type LinkAppearances = 'default' | 'outline'
+export type LinkAppearances = 'default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive'
 
-export const appearanceOptions: Record<LinkAppearances, { label: string; value: string }> = {
-  default: {
-    label: 'Default',
-    value: 'default',
-  },
-  outline: {
-    label: 'Outline',
-    value: 'outline',
-  },
-}
+export const appearanceOptions: Record<LinkAppearances, { label: string; value: LinkAppearances }> =
+  {
+    default: {
+      label: 'Default',
+      value: 'default',
+    },
+    outline: {
+      label: 'Outline',
+      value: 'outline',
+    },
+    ghost: {
+      label: 'Ghost',
+      value: 'ghost',
+    },
+    link: {
+      label: 'Link',
+      value: 'link',
+    },
+    secondary: {
+      label: 'Secondary',
+      value: 'secondary',
+    },
+    destructive: {
+      label: 'Destructive',
+      value: 'destructive',
+    },
+  }
 
 type LinkType = (options?: {
   appearances?: LinkAppearances[] | false
@@ -118,11 +135,11 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
   }
 
   if (appearances !== false) {
-    let appearanceOptionsToUse = [appearanceOptions.default, appearanceOptions.outline]
+    // let appearanceOptionsToUse = [appearanceOptions.default, appearanceOptions.outline]
 
-    if (appearances) {
-      appearanceOptionsToUse = appearances.map((appearance) => appearanceOptions[appearance])
-    }
+    // if (appearances) {
+    //   appearanceOptionsToUse = appearances.map((appearance) => appearanceOptions[appearance])
+    // }
 
     linkResult.fields.push({
       name: 'appearance',
@@ -131,7 +148,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
         description: 'Choose how the link should be rendered.',
       },
       defaultValue: 'default',
-      options: appearanceOptionsToUse,
+      options: Object.values(appearanceOptions),
     })
   }
 
