@@ -23,12 +23,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 242 100% 50% --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
+    --secondary: 360 100% 50%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
@@ -65,6 +63,9 @@
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
+    --tertiary: 51 90% 49%;
+    --tertiary-foreground: 210 40% 98%;
+
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
@@ -92,7 +93,14 @@
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
   }
 }
-
+@layer utilities {
+  .max-w-container {
+    @apply sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl;
+  }
+  .menu-link {
+    @apply text-primary hover:text-secondary transition-all hover:no-underline;
+  }
+}
 html {
   opacity: 0;
 }

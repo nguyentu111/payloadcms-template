@@ -30,19 +30,17 @@ const config = {
     container: {
       center: true,
       padding: {
-        '2xl': '2rem',
         DEFAULT: '1rem',
-        lg: '2rem',
-        md: '2rem',
         sm: '1rem',
+        md: '2rem',
+        lg: '2rem',
         xl: '2rem',
       },
       screens: {
-        '2xl': '86rem',
-        lg: '64rem',
+        lg: '60rem',
         md: '48rem',
         sm: '40rem',
-        xl: '80rem',
+        xl: '76rem',
       },
     },
     extend: {
@@ -88,6 +86,10 @@ const config = {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+        },
+        tertiary: {
+          DEFAULT: 'hsl(var(--tertiary))',
+          foreground: 'hsl(var(--tertiary-foreground))',
         },
         success: 'hsl(var(--success))',
         error: 'hsl(var(--error))',

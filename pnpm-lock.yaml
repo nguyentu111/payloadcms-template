@@ -8,6 +8,21 @@ importers:
 
   .:
     dependencies:
+      '@lexical/html':
+        specifier: 0.21.0
+        version: 0.21.0
+      '@lexical/list':
+        specifier: 0.21.0
+        version: 0.21.0
+      '@lexical/selection':
+        specifier: 0.21.0
+        version: 0.21.0
+      '@lexical/table':
+        specifier: 0.21.0
+        version: 0.21.0
+      '@lexical/utils':
+        specifier: 0.21.0
+        version: 0.21.0
       '@payloadcms/db-mongodb':
         specifier: latest
         version: 3.20.0(@aws-sdk/credential-providers@3.742.0)(payload@3.20.0(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))
@@ -36,8 +51,8 @@ importers:
         specifier: latest
         version: 3.20.0(@types/react@19.0.7)(monaco-editor@0.52.2)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(payload@3.20.0(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
       '@payloadcms/richtext-lexical':
-        specifier: latest
-        version: 3.20.0(cu3bubgmn7b7d4526yivy3yi2m)
+        specifier: ^3.20.0
+        version: 3.20.0(46ridfcpl2qubyzjaivzqjczam)
       '@payloadcms/ui':
         specifier: latest
         version: 3.20.0(@types/react@19.0.7)(monaco-editor@0.52.2)(next@15.1.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.4))(payload@3.20.0(graphql@16.10.0)(monaco-editor@0.52.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(typescript@5.7.3)
@@ -71,6 +86,12 @@ importers:
       graphql:
         specifier: ^16.8.2
         version: 16.10.0
+      gsap:
+        specifier: ^3.12.7
+        version: 3.12.7
+      lexical:
+        specifier: 0.21.0
+        version: 0.21.0
       lucide-react:
         specifier: ^0.378.0
         version: 0.378.0(react@19.0.0)
@@ -91,7 +112,7 @@ importers:
         version: 1.0.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       payloadcms-lexical-ext:
         specifier: ^0.5.3
-        version: 0.5.3(@lexical/table@0.21.0)(@payloadcms/richtext-lexical@3.20.0(cu3bubgmn7b7d4526yivy3yi2m))(escape-html@1.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 0.5.3(@lexical/table@0.21.0)(@payloadcms/richtext-lexical@3.20.0(46ridfcpl2qubyzjaivzqjczam))(escape-html@1.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       prism-react-renderer:
         specifier: ^2.3.1
         version: 2.4.1(react@19.0.0)
@@ -113,6 +134,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.17)
+      usehooks-ts:
+        specifier: ^3.1.1
+        version: 3.1.1(react@19.0.0)
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.2.0
@@ -641,6 +665,12 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc.0
+
+  '@faceless-ui/scroll-info@2.0.0':
+    resolution: {integrity: sha512-BkyJ9OQ4bzpKjE3UhI8BhcG36ZgfB4run8TmlaR4oMFUbl59dfyarNfjveyimrxIso9RhFEja/AJ5nQmbcR9hw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   '@faceless-ui/scroll-info@2.0.0-beta.0':
     resolution: {integrity: sha512-pUBhQP8vduA7rVndNsjhaCcds1BykA/Q4iV23JWijU6ZFL/M3Fm9P3ypDS+0VVxolqemNhw8S3FXPwZGgjH4Rw==}
@@ -2703,6 +2733,9 @@ packages:
     resolution: {integrity: sha512-AjqGKbDGUFRKIRCP9tCKiIGHyriz2oHEbPIbEtcSLSs4YjReZOIPQQWek4+6hjw62H9QShXHyaGivGiYVLeYFQ==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
+  gsap@3.12.7:
+    resolution: {integrity: sha512-V4GsyVamhmKefvcAKaoy0h6si0xX7ogwBoBSs2CTJwt7luW0oZzC0LhdkyuKV8PJAXr7Yaj8pMjCKD4GJ+eEMg==}
+
   has-bigints@1.1.0:
     resolution: {integrity: sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg==}
     engines: {node: '>= 0.4'}
@@ -3031,6 +3064,9 @@ packages:
 
   lodash.castarray@4.4.0:
     resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
+
+  lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
 
   lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
@@ -4241,6 +4277,12 @@ packages:
       '@types/react':
         optional: true
 
+  usehooks-ts@3.1.1:
+    resolution: {integrity: sha512-I4diPp9Cq6ieSUH2wu+fDAVQO43xwtulo+fKEidHUwZPnYImbtkTjzIJYcDcJqxgmX31GVqNFURodvcgHcW0pA==}
+    engines: {node: '>=16.15.0'}
+    peerDependencies:
+      react: ^16.8.0  || ^17 || ^18 || ^19 || ^19.0.0-rc
+
   utf8-byte-length@1.0.5:
     resolution: {integrity: sha512-Xn0w3MtiQ6zoz2vFyUVruaCL53O/DwUvkEeOvj+uulMm0BkUGYWmBYVyElqZaSLhY6ZD0ulfU3aBra2aVT4xfA==}
 
@@ -5216,6 +5258,11 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
       react-transition-group: 4.4.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
+  '@faceless-ui/scroll-info@2.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+
   '@faceless-ui/scroll-info@2.0.0-beta.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       react: 19.0.0
@@ -5716,10 +5763,10 @@ snapshots:
       - supports-color
       - typescript
 
-  '@payloadcms/richtext-lexical@3.20.0(cu3bubgmn7b7d4526yivy3yi2m)':
+  '@payloadcms/richtext-lexical@3.20.0(46ridfcpl2qubyzjaivzqjczam)':
     dependencies:
       '@faceless-ui/modal': 3.0.0-beta.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@faceless-ui/scroll-info': 2.0.0-beta.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@faceless-ui/scroll-info': 2.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@lexical/headless': 0.21.0
       '@lexical/html': 0.21.0
       '@lexical/link': 0.21.0
@@ -7691,6 +7738,8 @@ snapshots:
 
   graphql@16.10.0: {}
 
+  gsap@3.12.7: {}
+
   has-bigints@1.1.0: {}
 
   has-flag@4.0.0: {}
@@ -8002,6 +8051,8 @@ snapshots:
       p-locate: 5.0.0
 
   lodash.castarray@4.4.0: {}
+
+  lodash.debounce@4.0.8: {}
 
   lodash.isplainobject@4.0.6: {}
 
@@ -8578,10 +8629,10 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  payloadcms-lexical-ext@0.5.3(@lexical/table@0.21.0)(@payloadcms/richtext-lexical@3.20.0(cu3bubgmn7b7d4526yivy3yi2m))(escape-html@1.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  payloadcms-lexical-ext@0.5.3(@lexical/table@0.21.0)(@payloadcms/richtext-lexical@3.20.0(46ridfcpl2qubyzjaivzqjczam))(escape-html@1.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@lexical/table': 0.21.0
-      '@payloadcms/richtext-lexical': 3.20.0(cu3bubgmn7b7d4526yivy3yi2m)
+      '@payloadcms/richtext-lexical': 3.20.0(46ridfcpl2qubyzjaivzqjczam)
       escape-html: 1.0.3
       lucide-react: 0.469.0(react@19.0.0)
       react-colorful: 5.6.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -9518,6 +9569,11 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.0.7
+
+  usehooks-ts@3.1.1(react@19.0.0):
+    dependencies:
+      lodash.debounce: 4.0.8
+      react: 19.0.0
 
   utf8-byte-length@1.0.5: {}
 

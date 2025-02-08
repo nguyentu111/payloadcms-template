@@ -10,49 +10,53 @@ import { CMSLink } from '@/components/Link'
 import { useDebounce } from '@/utilities/useDebounce'
 import { SearchIcon } from 'lucide-react'
 import Link from 'next/link'
+import { Logo } from '@/components/Logo/Logo'
+import { MegaMenu } from '../MegaMenu/Component'
 
 export const HeaderNav: React.FC<{ data: HeaderType; header: React.RefObject<HTMLElement> }> = ({
   data,
   header,
 }) => {
-  const navItems = data?.navItems || []
+  const navItems = data?.navItems?.items || []
 
   return (
-    <nav className="flex gap-3 items-center">
+    <ul className="flex items-center  space-x-8 text-sm font-medium">
+      <li>
+        <Link href="/" className="my-auto">
+          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+        </Link>
+      </li>
       {navItems?.map((navItem) => (
         <NavItem anchor={header} data={navItem} key={navItem.link.label}>
-          {navItem.menu && <RenderClientOnlyBlocks blocks={navItem.menu} />}
+          {navItem.menu?.addMenu && <MegaMenu menu={navItem.menu} />}
         </NavItem>
       ))}
-      <Link href="/search">
-        <span className="sr-only">Search</span>
-        <SearchIcon className="w-5 text-primary" />
-      </Link>
-    </nav>
+    </ul>
   )
 }
 
 const NavItem: React.FC<{
   children: React.ReactNode
   anchor: React.RefObject<HTMLElement>
-  data: NonNullable<HeaderType['navItems']>[number]
+  data: NonNullable<NonNullable<HeaderType['navItems']>['items']>[number]
 }> = ({ children, anchor, data }) => {
-  const { link, menu, addMenu } = data
+  const { link, menu } = data
   const [open, setOpen] = React.useState(false)
   const openDebouced = useDebounce(open, 100)
   const ref = useRef<HTMLLIElement>(null)
   return (
     <li
-      className="relative"
+      className="relative py-4"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
       ref={ref}
     >
-      <CMSLink {...link}></CMSLink>
-      {addMenu && menu && menu.length > 0 && (
+      <CMSLink {...link} className="uppercase text-white"></CMSLink>
+      {menu?.addMenu && (
         <CustomPopover
+          anchorIsTrigger={!menu.anchoringToHeader}
           // @ts-expect-error
-          anchorRef={data.anchoringToHeader ? anchor : ref}
+          anchorRef={menu.anchoringToHeader ? anchor : ref}
           isOpen={openDebouced}
           onClose={() => setOpen(false)}
         >

@@ -128,7 +128,19 @@ export interface Page {
             /**
              * Choose how the link should be rendered.
              */
-            appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
+            appearance?:
+              | (
+                  | 'default'
+                  | 'outline'
+                  | 'ghost'
+                  | 'link'
+                  | 'secondary'
+                  | 'destructive'
+                  | 'menu'
+                  | 'menuUnderline'
+                  | 'menuSpecial'
+                )
+              | null;
           };
           id?: string | null;
         }[]
@@ -368,7 +380,19 @@ export interface CallToActionBlock {
           /**
            * Choose how the link should be rendered.
            */
-          appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
+          appearance?:
+            | (
+                | 'default'
+                | 'outline'
+                | 'ghost'
+                | 'link'
+                | 'secondary'
+                | 'destructive'
+                | 'menu'
+                | 'menuUnderline'
+                | 'menuSpecial'
+              )
+            | null;
         };
         id?: string | null;
       }[]
@@ -418,7 +442,19 @@ export interface ContentBlock {
           /**
            * Choose how the link should be rendered.
            */
-          appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
+          appearance?:
+            | (
+                | 'default'
+                | 'outline'
+                | 'ghost'
+                | 'link'
+                | 'secondary'
+                | 'destructive'
+                | 'menu'
+                | 'menuUnderline'
+                | 'menuSpecial'
+              )
+            | null;
         };
         id?: string | null;
       }[]
@@ -723,10 +759,15 @@ export interface Search {
   id: string;
   title?: string | null;
   priority?: number | null;
-  doc: {
-    relationTo: 'posts';
-    value: string | Post;
-  };
+  doc:
+    | {
+        relationTo: 'posts';
+        value: string | Post;
+      }
+    | {
+        relationTo: 'pages';
+        value: string | Page;
+      };
   slug?: string | null;
   meta?: {
     title?: string | null;
@@ -1478,84 +1519,193 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: string;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
-        };
-        addMenu?: boolean | null;
-        anchoringToHeader?: boolean | null;
-        menu?: (ContentBlock | MediaBlock | BannerBlock | RichTextBlock)[] | null;
-        id?: string | null;
-      }[]
-    | null;
+  topBar?: {
+    officeLocation: string;
+    phone: string;
+    hotline: string;
+    email: string;
+    suportLink: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?:
+        | (
+            | 'default'
+            | 'outline'
+            | 'ghost'
+            | 'link'
+            | 'secondary'
+            | 'destructive'
+            | 'menu'
+            | 'menuUnderline'
+            | 'menuSpecial'
+          )
+        | null;
+    };
+  };
+  navItems?: {
+    items?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?:
+              | (
+                  | 'default'
+                  | 'outline'
+                  | 'ghost'
+                  | 'link'
+                  | 'secondary'
+                  | 'destructive'
+                  | 'menu'
+                  | 'menuUnderline'
+                  | 'menuSpecial'
+                )
+              | null;
+          };
+          menu?: {
+            addMenu?: boolean | null;
+            anchoringToHeader?: boolean | null;
+            leftSidebar?: {
+              groups?:
+                | {
+                    title?: string | null;
+                    links?:
+                      | {
+                          link: {
+                            type?: ('reference' | 'custom') | null;
+                            newTab?: boolean | null;
+                            reference?:
+                              | ({
+                                  relationTo: 'pages';
+                                  value: string | Page;
+                                } | null)
+                              | ({
+                                  relationTo: 'posts';
+                                  value: string | Post;
+                                } | null);
+                            url?: string | null;
+                            label: string;
+                            /**
+                             * Choose how the link should be rendered.
+                             */
+                            appearance?:
+                              | (
+                                  | 'default'
+                                  | 'outline'
+                                  | 'ghost'
+                                  | 'link'
+                                  | 'secondary'
+                                  | 'destructive'
+                                  | 'menu'
+                                  | 'menuUnderline'
+                                  | 'menuSpecial'
+                                )
+                              | null;
+                          };
+                          id?: string | null;
+                        }[]
+                      | null;
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+            main?: {
+              groups?:
+                | {
+                    title?: string | null;
+                    linkGroup?: {
+                      links?:
+                        | {
+                            link: {
+                              type?: ('reference' | 'custom') | null;
+                              newTab?: boolean | null;
+                              reference?:
+                                | ({
+                                    relationTo: 'pages';
+                                    value: string | Page;
+                                  } | null)
+                                | ({
+                                    relationTo: 'posts';
+                                    value: string | Post;
+                                  } | null);
+                              url?: string | null;
+                              label: string;
+                              /**
+                               * Choose how the link should be rendered.
+                               */
+                              appearance?:
+                                | (
+                                    | 'default'
+                                    | 'outline'
+                                    | 'ghost'
+                                    | 'link'
+                                    | 'secondary'
+                                    | 'destructive'
+                                    | 'menu'
+                                    | 'menuUnderline'
+                                    | 'menuSpecial'
+                                  )
+                                | null;
+                            };
+                            id?: string | null;
+                          }[]
+                        | null;
+                    };
+                    posts?: {
+                      colections?:
+                        | {
+                            reference:
+                              | {
+                                  relationTo: 'pages';
+                                  value: string | Page;
+                                }
+                              | {
+                                  relationTo: 'posts';
+                                  value: string | Post;
+                                };
+                            id?: string | null;
+                          }[]
+                        | null;
+                    };
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "richTextBlock".
- */
-export interface RichTextBlock {
-  richText: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'richText';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1591,10 +1741,14 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  navItems?:
+  topBar?:
     | T
     | {
-        link?:
+        officeLocation?: T;
+        phone?: T;
+        hotline?: T;
+        email?: T;
+        suportLink?:
           | T
           | {
               type?: T;
@@ -1604,40 +1758,99 @@ export interface HeaderSelect<T extends boolean = true> {
               label?: T;
               appearance?: T;
             };
-        addMenu?: T;
-        anchoringToHeader?: T;
-        menu?:
+      };
+  navItems?:
+    | T
+    | {
+        items?:
           | T
           | {
-              content?: T | ContentBlockSelect<T>;
-              mediaBlock?: T | MediaBlockSelect<T>;
-              banner?: T | BannerBlockSelect<T>;
-              richText?: T | RichTextBlockSelect<T>;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              menu?:
+                | T
+                | {
+                    addMenu?: T;
+                    anchoringToHeader?: T;
+                    leftSidebar?:
+                      | T
+                      | {
+                          groups?:
+                            | T
+                            | {
+                                title?: T;
+                                links?:
+                                  | T
+                                  | {
+                                      link?:
+                                        | T
+                                        | {
+                                            type?: T;
+                                            newTab?: T;
+                                            reference?: T;
+                                            url?: T;
+                                            label?: T;
+                                            appearance?: T;
+                                          };
+                                      id?: T;
+                                    };
+                                id?: T;
+                              };
+                        };
+                    main?:
+                      | T
+                      | {
+                          groups?:
+                            | T
+                            | {
+                                title?: T;
+                                linkGroup?:
+                                  | T
+                                  | {
+                                      links?:
+                                        | T
+                                        | {
+                                            link?:
+                                              | T
+                                              | {
+                                                  type?: T;
+                                                  newTab?: T;
+                                                  reference?: T;
+                                                  url?: T;
+                                                  label?: T;
+                                                  appearance?: T;
+                                                };
+                                            id?: T;
+                                          };
+                                    };
+                                posts?:
+                                  | T
+                                  | {
+                                      colections?:
+                                        | T
+                                        | {
+                                            reference?: T;
+                                            id?: T;
+                                          };
+                                    };
+                                id?: T;
+                              };
+                        };
+                  };
+              id?: T;
             };
-        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock_select".
- */
-export interface BannerBlockSelect<T extends boolean = true> {
-  style?: T;
-  content?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "richTextBlock_select".
- */
-export interface RichTextBlockSelect<T extends boolean = true> {
-  richText?: T;
-  id?: T;
-  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1683,6 +1896,31 @@ export interface TaskSchedulePublish {
     user?: (string | null) | User;
   };
   output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock".
+ */
+export interface BannerBlock {
+  style: 'info' | 'warning' | 'error' | 'success';
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'banner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

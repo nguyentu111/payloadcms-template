@@ -12,15 +12,24 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
-
+import { Roboto } from 'next/font/google'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 
+const roboto = Roboto({
+  weight: ['400', '700', '500'],
+  subsets: ['vietnamese'],
+  display: 'swap',
+})
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang="en" suppressHydrationWarning>
+    <html
+      className={cn(GeistSans.variable, GeistMono.variable, roboto.className)}
+      lang="vi"
+      suppressHydrationWarning
+    >
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />

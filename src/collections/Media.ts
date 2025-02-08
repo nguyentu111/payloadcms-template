@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import {
   FixedToolbarFeature,
+  HeadingFeature,
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'

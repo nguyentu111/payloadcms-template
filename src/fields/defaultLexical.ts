@@ -1,30 +1,24 @@
-import { Config } from 'payload'
 import {
-  BoldFeature,
-  ItalicFeature,
-  LinkFeature,
-  ParagraphFeature,
-  lexicalEditor,
-  UnderlineFeature,
-  OrderedListFeature,
-  UnorderedListFeature,
-  ChecklistFeature,
-  BlockquoteFeature,
-  UploadFeature,
-  EXPERIMENTAL_TableFeature,
   AlignFeature,
+  BlockquoteFeature,
+  BoldFeature,
+  ChecklistFeature,
+  EXPERIMENTAL_TableFeature,
+  HeadingFeature,
   HorizontalRuleFeature,
-  SuperscriptFeature,
+  ItalicFeature,
+  lexicalEditor,
+  LinkFeature,
+  OrderedListFeature,
+  ParagraphFeature,
   SubscriptFeature,
-  TreeViewFeature,
+  SuperscriptFeature,
+  UnderlineFeature,
+  UnorderedListFeature,
+  UploadFeature,
 } from '@payloadcms/richtext-lexical'
-import {
-  BgColorFeature,
-  HighlightColorFeature,
-  TextColorFeature,
-  YoutubeFeature,
-  VimeoFeature,
-} from 'payloadcms-lexical-ext'
+import { Config } from 'payload'
+import { BgColorFeature, HighlightColorFeature, TextColorFeature } from 'payloadcms-lexical-ext'
 export const defaultLexical: Config['editor'] = lexicalEditor({
   features: () => {
     return [
@@ -32,6 +26,7 @@ export const defaultLexical: Config['editor'] = lexicalEditor({
       UnderlineFeature(),
       BoldFeature(),
       ItalicFeature(),
+      HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5', 'h6'] }),
       LinkFeature({
         enabledCollections: ['pages', 'posts'],
         fields: ({ defaultFields }) => {
@@ -59,7 +54,7 @@ export const defaultLexical: Config['editor'] = lexicalEditor({
             },
           ]
         },
-      }),
+      }), 
       OrderedListFeature(),
       UnorderedListFeature(),
       ChecklistFeature(),
@@ -73,8 +68,6 @@ export const defaultLexical: Config['editor'] = lexicalEditor({
       TextColorFeature(),
       HighlightColorFeature(),
       BgColorFeature(),
-      YoutubeFeature(),
-      VimeoFeature(),
     ]
   },
 })
