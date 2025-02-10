@@ -20,6 +20,9 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { BreadCrumb } from '@/blocks/BreadCrumb/config'
+import { Hero } from '@/blocks/Hero'
+import { ArchiveCarousel } from '@/blocks/ArchirveCarousel/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -80,7 +83,16 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+                BreadCrumb,
+                Hero,
+                ArchiveCarousel,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

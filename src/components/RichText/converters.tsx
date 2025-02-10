@@ -13,12 +13,11 @@ import {
   SerializedTextNode,
   Spread,
 } from '@payloadcms/richtext-lexical/lexical'
+import { TextJSXConverter as DefaultTextJSXConverter } from '@payloadcms/richtext-lexical/react'
 
 export const TextJSXConverter: JSXConverters<SerializedTextNode> = {
   text: ({
     node,
-    converters,
-    parent,
   }: {
     childIndex: number
     converters: JSXConverters
@@ -33,7 +32,6 @@ export const TextJSXConverter: JSXConverters<SerializedTextNode> = {
     parent: SerializedLexicalNodeWithParent
   }) => {
     let text: React.ReactNode = node.text
-
     if (node.format & IS_BOLD) {
       text = <strong>{text}</strong>
     }
@@ -55,14 +53,17 @@ export const TextJSXConverter: JSXConverters<SerializedTextNode> = {
     if (node.format & IS_SUPERSCRIPT) {
       text = <sup>{text}</sup>
     }
+    DefaultTextJSXConverter.text
     if (node.style) {
       const style: React.CSSProperties = {}
-
       let match = node.style.match(/(?:^|;)\s?background-color: ([^;]+)/)
       match && (style.backgroundColor = match[1])
 
       match = node.style.match(/(?:^|;)\s?color: ([^;]+)/)
       match && (style.color = match[1])
+
+      match = node.style.match(/(?:^|;)\s?font-size: ([^;]+)/)
+      match && (style.fontSize = match[1])
 
       text = <span style={style}>{text}</span>
     }

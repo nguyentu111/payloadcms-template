@@ -16,9 +16,17 @@ import {
   UnderlineFeature,
   UnorderedListFeature,
   UploadFeature,
+  StrikethroughFeature,
+  IndentFeature,
+  FixedToolbarFeature,
+  InlineToolbarFeature,
 } from '@payloadcms/richtext-lexical'
 import { Config } from 'payload'
-import { BgColorFeature, HighlightColorFeature, TextColorFeature } from 'payloadcms-lexical-ext'
+import { FontColorFeature } from './richtext-features/text-color/feature.server'
+import { BackgroundColorFeature } from './richtext-features/background-color/feature.server'
+import { FontSizeFeature } from './richtext-features/font-size/feature.server'
+import { YoutubeFeature } from './richtext-features/embed/features/youtube/feature.server'
+import { VimeoFeature } from './richtext-features/embed/features/vimeo/feature.server'
 export const defaultLexical: Config['editor'] = lexicalEditor({
   features: () => {
     return [
@@ -26,6 +34,7 @@ export const defaultLexical: Config['editor'] = lexicalEditor({
       UnderlineFeature(),
       BoldFeature(),
       ItalicFeature(),
+      StrikethroughFeature(),
       HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5', 'h6'] }),
       LinkFeature({
         enabledCollections: ['pages', 'posts'],
@@ -54,7 +63,7 @@ export const defaultLexical: Config['editor'] = lexicalEditor({
             },
           ]
         },
-      }), 
+      }),
       OrderedListFeature(),
       UnorderedListFeature(),
       ChecklistFeature(),
@@ -65,9 +74,14 @@ export const defaultLexical: Config['editor'] = lexicalEditor({
       HorizontalRuleFeature(),
       SuperscriptFeature(),
       SubscriptFeature(),
-      TextColorFeature(),
-      HighlightColorFeature(),
-      BgColorFeature(),
+      FontColorFeature(),
+      BackgroundColorFeature(),
+      FontSizeFeature(),
+      YoutubeFeature(),
+      VimeoFeature(),
+      IndentFeature(),
+      FixedToolbarFeature(),
+      InlineToolbarFeature(),
     ]
   },
 })

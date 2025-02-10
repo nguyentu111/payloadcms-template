@@ -8,6 +8,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { linkGroup } from '@/fields/linkGroup'
+import { YoutubeFeature } from '@/fields/richtext-features/embed/features/youtube/feature.server'
 
 export const hero: Field = {
   name: 'hero',

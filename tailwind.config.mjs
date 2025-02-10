@@ -1,6 +1,6 @@
 import tailwindcssAnimate from 'tailwindcss-animate'
 import typography from '@tailwindcss/typography'
-
+const plugin = require('tailwindcss/plugin')
 /** @type {import('tailwindcss').Config} */
 const config = {
   content: [
@@ -10,7 +10,16 @@ const config = {
     './src/**/*.{ts,tsx}',
   ],
   darkMode: ['selector', '[data-theme="dark"]'],
-  plugins: [tailwindcssAnimate, typography],
+  plugins: [
+    'postcss-import',
+    tailwindcssAnimate,
+    typography,
+    plugin(({ addComponents, theme }) => {
+      addComponents({
+        '.prose-xs': theme('typography.xs'),
+      })
+    }),
+  ],
   prefix: '',
   safelist: [
     'lg:col-span-4',
@@ -113,8 +122,42 @@ const config = {
         DEFAULT: {
           css: [
             {
+              '--tw-prose-bold': 'var(--text)',
               '--tw-prose-body': 'var(--text)',
               '--tw-prose-headings': 'var(--text)',
+              '--tw-prose-links': 'var(--text)',
+              '--tw-prose-bold': 'var(--text)',
+              // '--tw-prose-counters': '#6b7280',
+              // '--tw-prose-bullets': '#d1d5db',
+              // '--tw-prose-hr': '#e5e7eb',
+              // '--tw-prose-quotes': '#111827',
+              // '--tw-prose-quote-borders': '#e5e7eb',
+              // '--tw-prose-captions': '#6b7280',
+              // '--tw-prose-kbd': '#111827',
+              // '--tw-prose-kbd-shadows: 1'7 '24 39',
+              // '--tw-prose-code': '#111827',
+              // '--tw-prose-pre-code': '#e5e7eb',
+              // '--tw-prose-pre-bg': '#1f2937',
+              // '--tw-prose-th-borders': '#d1d5db',
+              // '--tw-prose-td-borders': '#e5e7eb',
+              // '--tw-prose-invert-body': '#d1d5db',
+              // '--tw-prose-invert-headings': '#fff',
+              // '--tw-prose-invert-lead': '#9ca3af',
+              // '--tw-prose-invert-links': '#fff',
+              // '--tw-prose-invert-bold': '#fff',
+              // '--tw-prose-invert-counters': '#9ca3af',
+              // '--tw-prose-invert-bullets': '#4b5563',
+              // '--tw-prose-invert-hr': '#374151',
+              // '--tw-prose-invert-quotes': '#f3f4f6',
+              // '--tw-prose-invert-quote-borders': '#374151',
+              // '--tw-prose-invert-captions': '#9ca3af',
+              // '--tw-prose-invert-kbd': '#fff',
+              // '--tw-prose-invert-kbd-shadows': 255255 255',
+              // '--tw-prose-invert-code': '#fff',
+              // '--tw-prose-invert-pre-code': '#d1d5db',
+              // '--tw-prose-invert-pre-bg: rgb(0 0 '0 '/ 50%)',
+              // '--tw-prose-invert-th-borders': '#4b5563',
+              // '--tw-prose-invert-td-borders': '#374151',
               h1: {
                 fontWeight: 'normal',
                 marginBottom: '0.25em',
@@ -122,30 +165,43 @@ const config = {
             },
           ],
         },
-        base: {
-          css: [
-            {
-              h1: {
-                fontSize: '2.5rem',
-              },
-              h2: {
-                fontSize: '1.25rem',
-                fontWeight: 600,
-              },
+        xs: {
+          css: {
+            fontSize: '0.75rem', // Equivalent to text-xs
+            h1: {
+              marginBottom: '0.75em',
             },
-          ],
+            h2: {
+              marginBottom: '0.5em',
+            },
+            h3: {
+              marginBottom: '0.25em',
+            },
+            h3: {
+              marginBottom: '0.25em',
+            },
+            h3: {
+              marginBottom: '0.25em',
+            },
+            h3: {
+              marginBottom: '0.25em',
+            },
+            p: {},
+          },
+        },
+        base: {
+          css: {
+            h1: {
+              fontSize: '2.5rem',
+            },
+            h2: {
+              fontSize: '1.25rem',
+              fontWeight: 600,
+            },
+          },
         },
         md: {
-          css: [
-            {
-              h1: {
-                fontSize: '3.5rem',
-              },
-              h2: {
-                fontSize: '1.5rem',
-              },
-            },
-          ],
+          css: {},
         },
       }),
     },

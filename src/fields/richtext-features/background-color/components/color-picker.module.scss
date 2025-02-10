@@ -1,0 +1,89 @@
+.colorPicker {
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 320px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  margin-bottom: 1rem;
+
+  @media (max-width: 400px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.colorSquare {
+  aspect-ratio: 1;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0;
+  transition: transform 0.2s;
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+  &:hover {
+    transform: scale(1.1);
+    z-index: 1;
+  }
+
+  &:focus {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+}
+
+.selectedIndicator {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: 1rem;
+}
+
+.customColor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #eee;
+}
+
+.colorInput {
+  width: 50px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 4px;
+  }
+}
+
+.customLabel {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.selectedColorDisplay {
+  font-size: 0.875rem;
+  color: #333;
+  padding-top: 0.5rem;
+  border-top: 1px solid #eee;
+}

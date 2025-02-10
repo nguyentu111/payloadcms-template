@@ -175,7 +175,7 @@ Core features:
 - [React Hook Form](https://react-hook-form.com)
 - [Payload Admin Bar](https://github.com/payloadcms/payload-admin-bar)
 - [TailwindCSS styling](https://tailwindcss.com/)
-- [shadcn/ui components](https://ui.shadcn.com/)
+- [shadcn/ui components 2.1.8](https://ui.shadcn.com/)
 - User Accounts and Authentication
 - Fully featured blog
 - Publication workflow

@@ -11,7 +11,6 @@ import {
   LinkJSXConverter,
   RichText as RichTextWithoutBlocks,
 } from '@payloadcms/richtext-lexical/react'
-import { JSXConverters } from 'payloadcms-lexical-ext'
 import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
 import type {
   BannerBlock as BannerBlockProps,
@@ -21,7 +20,9 @@ import type {
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { cn } from '@/utilities/ui'
-import { HeadingJSXConverter, ParagraphJSXConverter, TextJSXConverter } from './converters'
+import { TextJSXConverter } from './converters'
+import { YoutubeJSXConverter } from '@/fields/richtext-features/embed/converters/jsx/YoutubeJSXConverter'
+import { VimeoJSXConverter } from '@/fields/richtext-features/embed/converters/jsx/VimeoJSXConverter'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -54,10 +55,9 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
     cta: ({ node }) => <CallToActionBlock {...node.fields} />,
   },
-  // ...JSXConverters,
   ...TextJSXConverter,
-  ...ParagraphJSXConverter,
-  ...HeadingJSXConverter,
+  ...YoutubeJSXConverter,
+  ...VimeoJSXConverter,
 })
 
 type Props = {

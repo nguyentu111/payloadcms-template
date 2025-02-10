@@ -8,8 +8,6 @@ import type {
   FormBlock as FormBlockType,
   MediaBlock as MediaBlockType,
   Page,
-  RichTextBlock as RichTextBlockType,
-  TourCategoriesBlock as TourCategoriesBlockType,
 } from '@/payload-types'
 
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
@@ -19,7 +17,6 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { BannerBlock } from './Banner/Component'
 import { RichTextBlock } from './Richtext/Component'
 import { CodeBlock } from './Code/Component'
-import { TourCategoriesBlock } from '../Header/MegaMenu/Component'
 
 const clientOnlyBlocks = {
   content: ContentBlock,
@@ -29,7 +26,6 @@ const clientOnlyBlocks = {
   banner: BannerBlock,
   richText: RichTextBlock,
   code: CodeBlock,
-  'tour-categories': TourCategoriesBlock,
 }
 export type ClientOnlyBlock =
   | ContentBlockType
@@ -37,9 +33,7 @@ export type ClientOnlyBlock =
   | FormBlockType
   | MediaBlockType
   | BannerBlockType
-  | RichTextBlockType
   | CodeBlockType
-  | TourCategoriesBlockType
 export const RenderClientOnlyBlocks: React.FC<{
   blocks: ClientOnlyBlock[]
 }> = (props) => {

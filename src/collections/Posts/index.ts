@@ -26,6 +26,9 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
+import { YoutubeFeature } from '@/fields/richtext-features/embed/features/youtube/feature.server'
+import { VimeoFeature } from '@/fields/richtext-features/embed/features/vimeo/feature.server'
+import { FontSizeFeature } from '@/fields/richtext-features/font-size/feature.server'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
