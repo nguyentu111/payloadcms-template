@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Field, FieldHook } from 'payload'
 
 import {
   BlocksFeature,
@@ -26,10 +26,6 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
-import { YoutubeFeature } from '@/fields/richtext-features/embed/features/youtube/feature.server'
-import { VimeoFeature } from '@/fields/richtext-features/embed/features/vimeo/feature.server'
-import { FontSizeFeature } from '@/fields/richtext-features/font-size/feature.server'
-
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
@@ -45,6 +41,7 @@ export const Posts: CollectionConfig<'posts'> = {
     title: true,
     slug: true,
     categories: true,
+    postType: true,
     meta: {
       image: true,
       description: true,
@@ -112,9 +109,6 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'relatedPosts',
               type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
               filterOptions: ({ id }) => {
                 return {
                   id: {
@@ -128,11 +122,13 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'categories',
               type: 'relationship',
-              admin: {
-                position: 'sidebar',
-              },
-              hasMany: true,
               relationTo: 'categories',
+              hasMany: true,
+            },
+            {
+              name: 'postType',
+              type: 'relationship',
+              relationTo: 'post-types',
             },
           ],
           label: 'Meta',

@@ -46,10 +46,10 @@ const config = {
         xl: '2rem',
       },
       screens: {
+        xl: '76rem',
         lg: '60rem',
         md: '48rem',
         sm: '40rem',
-        xl: '76rem',
       },
     },
     extend: {

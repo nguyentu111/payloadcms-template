@@ -19,9 +19,6 @@ import { AlignFeatureClient as AlignFeatureClient_e70f5e05f09f93e00b997edb1ef0c8
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { SuperscriptFeatureClient as SuperscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { SubscriptFeatureClient as SubscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { FontColorFeatureClient as FontColorFeatureClient_7762508577ba2139dc86b61d98013fd0 } from '@/fields/richtext-features/text-color/feature.client.ts'
-import { BackgroundColorFeatureClient as BackgroundColorFeatureClient_6dbc4033c0624e8ed4ba9f51dd279b73 } from '@/fields/richtext-features/background-color/feature.client.ts'
-import { FontSizeFeatureClient as FontSizeFeatureClient_df7cb8e4ed608992b03985b8c5582399 } from '@/fields/richtext-features/font-size/feature.client.ts'
 import { default as default_c8d5074fbd4b0731af44265b706a918e } from '@/fields/richtext-features/embed/features/youtube/feature.client.ts'
 import { default as default_807bd4a8a1879d27a5d75fc7727fe47b } from '@/fields/richtext-features/embed/features/vimeo/feature.client.ts'
 import { IndentFeatureClient as IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
@@ -34,7 +31,7 @@ import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from 
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
-import { RowLabel as RowLabel_1f6ff6ff633e3695d348f4f3c58f1466 } from '@/Footer/RowLabel'
+import { RowLabel as RowLabel_e5f2ea2a3ff3620de63526e885e3b034 } from '@/globals/Footer/RowLabel'
 import { default as default_1a7510af427896d367a49dbf838d2de6 } from '@/components/BeforeDashboard'
 import { default as default_8a7ab0eb7ab5c511aba12e68480bfe5e } from '@/components/BeforeLogin'
 
@@ -60,9 +57,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#SuperscriptFeatureClient": SuperscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#SubscriptFeatureClient": SubscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@/fields/richtext-features/text-color/feature.client.ts#FontColorFeatureClient": FontColorFeatureClient_7762508577ba2139dc86b61d98013fd0,
-  "@/fields/richtext-features/background-color/feature.client.ts#BackgroundColorFeatureClient": BackgroundColorFeatureClient_6dbc4033c0624e8ed4ba9f51dd279b73,
-  "@/fields/richtext-features/font-size/feature.client.ts#FontSizeFeatureClient": FontSizeFeatureClient_df7cb8e4ed608992b03985b8c5582399,
   "@/fields/richtext-features/embed/features/youtube/feature.client.ts#default": default_c8d5074fbd4b0731af44265b706a918e,
   "@/fields/richtext-features/embed/features/vimeo/feature.client.ts#default": default_807bd4a8a1879d27a5d75fc7727fe47b,
   "@payloadcms/richtext-lexical/client#IndentFeatureClient": IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
@@ -75,7 +69,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
-  "@/Footer/RowLabel#RowLabel": RowLabel_1f6ff6ff633e3695d348f4f3c58f1466,
+  "@/globals/Footer/RowLabel#RowLabel": RowLabel_e5f2ea2a3ff3620de63526e885e3b034,
   "@/components/BeforeDashboard#default": default_1a7510af427896d367a49dbf838d2de6,
   "@/components/BeforeLogin#default": default_8a7ab0eb7ab5c511aba12e68480bfe5e
 }

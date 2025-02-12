@@ -46,6 +46,8 @@
     --success: 196 52% 74%;
     --warning: 34 89% 85%;
     --error: 10 100% 86%;
+
+    --title: 0 0% 20%;
   }
 
   [data-theme='dark'] {
@@ -95,6 +97,12 @@
   }
 }
 @layer utilities {
+  .max-w-title {
+    @apply max-w-[62.5rem];
+  }
+  .max-w-content {
+    @apply max-w-[54.6rem];
+  }
   .max-w-container {
     @apply sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl;
   }

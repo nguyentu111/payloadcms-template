@@ -1,14 +1,10 @@
 'use client'
 
-import React from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { cn } from '@/utilities/ui'
-import type { Header, Page, Post } from '@/payload-types'
-import { formatPrice } from '@/utilities/formatPrice'
 import { CMSLink } from '@/components/Link'
-import { Card } from '@/components/Card'
 import { Media } from '@/components/Media'
+import type { Header, Page, Post } from '@/payload-types'
+import Link from 'next/link'
+import React from 'react'
 type Props = {
   menu: NonNullable<NonNullable<NonNullable<Header['navItems']>['items']>[number]['menu']>
 }

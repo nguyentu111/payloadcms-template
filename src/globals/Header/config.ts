@@ -1,6 +1,5 @@
 import type { Field, GlobalConfig, Tab } from 'payload'
 
-// importappearanceOptions,  { link } from '@/fields/link'
 import { revalidateHeader } from './hooks/revalidateHeader'
 import { Topbar } from './Topbar/config'
 import { MegaMenu } from './MegaMenu/config'

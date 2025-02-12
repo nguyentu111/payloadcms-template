@@ -16,6 +16,8 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'single-pages': SinglePage;
+    'post-types': PostType;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -32,6 +34,8 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'single-pages': SinglePagesSelect<false> | SinglePagesSelect<true>;
+    'post-types': PostTypesSelect<false> | PostTypesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -185,6 +189,7 @@ export interface Post {
   };
   relatedPosts?: (string | Post)[] | null;
   categories?: (string | Category)[] | null;
+  postType?: (string | null) | PostType;
   meta?: {
     title?: string | null;
     /**
@@ -317,6 +322,18 @@ export interface Category {
         id?: string | null;
       }[]
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "post-types".
+ */
+export interface PostType {
+  id: string;
+  title?: string | null;
+  slug: string;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -774,6 +791,361 @@ export interface ArchiveCarouselBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "single-pages".
+ */
+export interface SinglePage {
+  id: string;
+  postTypes: (string | PostType)[];
+  blocks: (
+    | BannerBlock
+    | BreadCrumbBlock
+    | CallToActionBlock
+    | CodeBlock
+    | ContentBlock
+    | FormBlock
+    | HeroBlock
+    | MediaBlock
+    | RichTextBlock
+    | PostTitleBlock
+    | PostContentBlock
+    | RowBlockType
+    | ArchiveBlock
+    | ArchiveCarouselBlock
+  )[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock".
+ */
+export interface BannerBlock {
+  style: 'info' | 'warning' | 'error' | 'success';
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'banner';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
+export interface CodeBlock {
+  language?: ('typescript' | 'javascript' | 'css') | null;
+  code: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "richTextBlock".
+ */
+export interface RichTextBlock {
+  richText: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'richText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostTitleBlock".
+ */
+export interface PostTitleBlock {
+  content?: {};
+  styles?: {
+    mobile?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+    tablet?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+    pc?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postTitle';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostContentBlock".
+ */
+export interface PostContentBlock {
+  content?: {};
+  styles?: {
+    mobile?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+    tablet?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+    pc?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postContent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rowBlockType".
+ */
+export interface RowBlockType {
+  content: {
+    layoutType: 'grid' | 'flex';
+    gridOptions?: {
+      columns?: ('2' | '3' | '4' | '6') | null;
+      gap?: ('2' | '4' | '6' | '8') | null;
+      rowGap?: ('2' | '4' | '6' | '8') | null;
+    };
+    flexOptions?: {
+      direction?: ('row' | 'column') | null;
+      justifyContent?: ('start' | 'center' | 'end' | 'between' | 'around') | null;
+      alignItems?: ('start' | 'center' | 'end' | 'stretch') | null;
+      gap?: ('2' | '4' | '6' | '8') | null;
+    };
+    blocks: (
+      | BannerBlock
+      | BreadCrumbBlock
+      | CallToActionBlock
+      | CodeBlock
+      | ContentBlock
+      | FormBlock
+      | HeroBlock
+      | MediaBlock
+      | RichTextBlock
+      | PostTitleBlock
+      | PostContentBlock
+    )[];
+  };
+  styles?: {
+    mobile?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+    tablet?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+    pc?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+    };
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'row';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -968,6 +1340,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'single-pages';
+        value: string | SinglePage;
+      } | null)
+    | ({
+        relationTo: 'post-types';
+        value: string | PostType;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1229,6 +1609,7 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   relatedPosts?: T;
   categories?: T;
+  postType?: T;
   meta?:
     | T
     | {
@@ -1378,6 +1759,380 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "single-pages_select".
+ */
+export interface SinglePagesSelect<T extends boolean = true> {
+  postTypes?: T;
+  blocks?:
+    | T
+    | {
+        banner?: T | BannerBlockSelect<T>;
+        breadCrumb?: T | BreadCrumbBlockSelect<T>;
+        cta?: T | CallToActionBlockSelect<T>;
+        code?: T | CodeBlockSelect<T>;
+        content?: T | ContentBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
+        hero?: T | HeroBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        richText?: T | RichTextBlockSelect<T>;
+        postTitle?: T | PostTitleBlockSelect<T>;
+        postContent?: T | PostContentBlockSelect<T>;
+        row?: T | RowBlockTypeSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
+        archiveCarousel?: T | ArchiveCarouselBlockSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock_select".
+ */
+export interface BannerBlockSelect<T extends boolean = true> {
+  style?: T;
+  content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock_select".
+ */
+export interface CodeBlockSelect<T extends boolean = true> {
+  language?: T;
+  code?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "richTextBlock_select".
+ */
+export interface RichTextBlockSelect<T extends boolean = true> {
+  richText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostTitleBlock_select".
+ */
+export interface PostTitleBlockSelect<T extends boolean = true> {
+  content?: T | {};
+  styles?:
+    | T
+    | {
+        mobile?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+        tablet?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+        pc?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostContentBlock_select".
+ */
+export interface PostContentBlockSelect<T extends boolean = true> {
+  content?: T | {};
+  styles?:
+    | T
+    | {
+        mobile?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+        tablet?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+        pc?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rowBlockType_select".
+ */
+export interface RowBlockTypeSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        layoutType?: T;
+        gridOptions?:
+          | T
+          | {
+              columns?: T;
+              gap?: T;
+              rowGap?: T;
+            };
+        flexOptions?:
+          | T
+          | {
+              direction?: T;
+              justifyContent?: T;
+              alignItems?: T;
+              gap?: T;
+            };
+        blocks?:
+          | T
+          | {
+              banner?: T | BannerBlockSelect<T>;
+              breadCrumb?: T | BreadCrumbBlockSelect<T>;
+              cta?: T | CallToActionBlockSelect<T>;
+              code?: T | CodeBlockSelect<T>;
+              content?: T | ContentBlockSelect<T>;
+              formBlock?: T | FormBlockSelect<T>;
+              hero?: T | HeroBlockSelect<T>;
+              mediaBlock?: T | MediaBlockSelect<T>;
+              richText?: T | RichTextBlockSelect<T>;
+              postTitle?: T | PostTitleBlockSelect<T>;
+              postContent?: T | PostContentBlockSelect<T>;
+            };
+      };
+  styles?:
+    | T
+    | {
+        mobile?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+        tablet?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+        pc?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+            };
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "post-types_select".
+ */
+export interface PostTypesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1971,42 +2726,6 @@ export interface TaskSchedulePublish {
     user?: (string | null) | User;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

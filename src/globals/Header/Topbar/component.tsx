@@ -12,8 +12,8 @@ export const Topbar: React.FC<{ data: Header['topBar'] }> = ({ data }) => {
 
   return (
     <div className="bg-[#002B3E] text-white py-2 px-4">
-      <div className="container mx-auto flex flex-wrap items-center justify-between text-sm">
-        <div className="flex items-center space-x-6">
+      <div className=" mx-auto flex flex-wrap items-center justify-between text-sm">
+        <div className="flex items-center  justify-between space-x-6 mx-auto">
           {officeLocation && (
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />

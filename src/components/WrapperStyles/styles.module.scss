@@ -1,0 +1,29 @@
+$screen-lg: 60rem;
+$screen-md: 48rem;
+.wrapper {
+  margin-top: var(--margin-top);
+  margin-bottom: var(--margin-bottom);
+  margin-left: var(--margin-left);
+  margin-right: var(--margin-right);
+  font-size: var(--font-size);
+  font-weight: var(--font-weight);
+  color: var(--color);
+  @media (min-width: $screen-md) {
+    margin-top: var(--margin-top-tablet, var(--margin-top));
+    margin-bottom: var(--margin-bottom-tablet, var(--margin-bottom));
+    margin-left: var(--margin-left-tablet, var(--margin-left));
+    margin-right: var(--margin-right-tablet, var(--margin-right));
+    font-size: var(--font-size-tablet, var(--font-size));
+    color: var(--color-tablet, var(--color));
+    font-weight: var(--font-weight-tablet, var(--font-weight));
+  }
+  @media (min-width: $screen-lg) {
+    margin-top: var(--margin-top-pc, var(--margin-top-tablet, var(--margin-top)),);
+    margin-bottom: var(--margin-bottom-pc, var(--margin-bottom-tablet, var(--margin-bottom)));
+    margin-left: var(--margin-left-pc, var(--margin-left-tablet, var(--margin-left)));
+    margin-right: var(--margin-right-pc, var(--margin-right-tablet, var(--margin-right)));
+    font-size: var(--font-size-pc, var(--font-size-tablet, var(--font-size)));
+    color: var(--color-pc, var(--color-tablet, var(--color)));
+    font-weight: var(--font-weight-pc, var(--font-weight-tablet, var(--font-weight)));
+  }
+}

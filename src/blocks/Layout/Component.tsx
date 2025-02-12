@@ -1,15 +1,16 @@
-'use client'
-
 import React from 'react'
 import { cn } from '@/utilities/ui'
-import type { LayoutBlock as LayoutBlockType } from '@/payload-types'
+import type { Page, Post, RowBlockType } from '@/payload-types'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { WrapperStyles } from '@/components/WrapperStyles'
 
-export const LayoutBlock: React.FC<LayoutBlock> = ({
-  layoutType,
-  gridOptions,
-  flexOptions,
-  blocks,
+type Props = RowBlockType & {
+  doc?: Page | Post
+}
+export const LayoutBlock: React.FC<Props> = ({
+  doc,
+  content: { layoutType, gridOptions, flexOptions, blocks },
+  styles,
 }) => {
   const gridClasses = gridOptions && {
     'grid gap-x-2 gap-y-2': true,
@@ -35,19 +36,15 @@ export const LayoutBlock: React.FC<LayoutBlock> = ({
   }
 
   return (
-    <div className="container my-8">
+    <WrapperStyles styles={styles}>
       <div
         className={cn({
           ...(layoutType === 'grid' ? gridClasses : {}),
           ...(layoutType === 'flex' ? flexClasses : {}),
         })}
       >
-        {blocks?.map((block, i) => (
-          <div key={i} className="w-full">
-            <RenderBlocks blocks={[block]} />
-          </div>
-        ))}
+        <RenderBlocks blocks={blocks} doc={doc} />
       </div>
-    </div>
+    </WrapperStyles>
   )
 }

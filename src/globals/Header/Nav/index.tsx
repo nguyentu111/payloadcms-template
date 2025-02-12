@@ -4,11 +4,9 @@ import React, { useRef } from 'react'
 
 import type { Header as HeaderType } from '@/payload-types'
 
-import { RenderClientOnlyBlocks } from '@/blocks/RenderClientOnlyBlocks'
 import { CustomPopover } from '@/components/CustomPopover/component'
 import { CMSLink } from '@/components/Link'
 import { useDebounce } from '@/utilities/useDebounce'
-import { SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Logo } from '@/components/Logo/Logo'
 import { MegaMenu } from '../MegaMenu/Component'
@@ -46,12 +44,12 @@ const NavItem: React.FC<{
   const ref = useRef<HTMLLIElement>(null)
   return (
     <li
-      className="relative py-4"
+      className="relative"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
       ref={ref}
     >
-      <CMSLink {...link} className="uppercase text-white"></CMSLink>
+      <CMSLink {...link} className="uppercase text-white  py-4"></CMSLink>
       {menu?.addMenu && (
         <CustomPopover
           anchorIsTrigger={!menu.anchoringToHeader}

@@ -52,7 +52,7 @@ export const Card: React.FC<
       : false
   const titleToUse = titleFromProps || title
   const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
-  const href = `/${relationTo}/${slug}`
+  const href = `/${slug}`
 
   return (
     <Link href={href}>
@@ -73,7 +73,7 @@ export const Card: React.FC<
         </div>
         <div className="pt-2">
           {showCategories && hasCategories && (
-            <div className="text-xs  flex items-center">
+            <div className="text-xs  flex items-center text-accent-foreground">
               {publishedAt && <div>{formattedDateFromString(publishedAt)}</div>}
               <DotIcon className="w-4 h-4" />
               {relationTo === 'posts' && showCategories && hasCategories && (
@@ -101,7 +101,7 @@ export const Card: React.FC<
             </div>
           )}
           {titleToUse && (
-            <div className="prose">
+            <div className="prose text-title group-hover:underline group-hover:text-primary transition-all duration-500">
               <h3>
                 {/* <Link
                 className="not-prose text-black group-hover:text-secondary transition-all group-hover:underline"

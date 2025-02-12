@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import type { Page } from '@/payload-types'
+import type { Page, Post, SinglePage } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
@@ -11,23 +11,36 @@ import { RichTextBlock } from './Richtext/Component'
 import { BreadcrumbBlock } from './BreadCrumb/Component'
 import { HeroBlock } from './Hero/Component'
 import { ArchiveCarouselBlock } from './ArchirveCarousel/Component'
-
+import { BannerBlock } from './Banner/Component'
+import { Archive } from './ArchiveBlock/config'
+import { Content } from './Content/config'
+import { CodeBlock } from './Code/Component'
+import { PostTitleBlock } from './PostTitle/Component'
+import { PostContentBlock } from './PostContent/Component'
+import { LayoutBlock } from './Layout/Component'
+// import {ArchiveBlock as AB, ArchiveCarouselBlock as , } fxrom './ArchirveCarousel/Component'
 const blockComponents = {
-  archive: ArchiveBlock,
-  content: ContentBlock,
-  cta: CallToActionBlock,
-  formBlock: FormBlock,
-  mediaBlock: MediaBlock,
-  richText: RichTextBlock,
-  breadCrumb: BreadcrumbBlock,
-  hero: HeroBlock,
+  [Archive.slug]: ArchiveBlock,
   archiveCarousel: ArchiveCarouselBlock,
+  banner: BannerBlock,
+  breadCrumb: BreadcrumbBlock,
+  code: CodeBlock,
+  [Content.slug]: ContentBlock,
+  cta: CallToActionBlock,
+  postTitle: PostTitleBlock,
+  postContent: PostContentBlock,
+  mediaBlock: MediaBlock,
+  formBlock: FormBlock,
+  richText: RichTextBlock,
+  hero: HeroBlock,
+  row: LayoutBlock,
 }
 
 export const RenderBlocks: React.FC<{
-  blocks: Page['layout'][0][]
+  blocks: SinglePage['blocks']
+  doc?: Page | Post
 }> = (props) => {
-  const { blocks } = props
+  const { blocks, doc } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -43,8 +56,8 @@ export const RenderBlocks: React.FC<{
             if (Block) {
               return (
                 <div key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer />
+                  {/* ts-expect-error there may be some mismatch between the expected types here */}
+                  <Block {...block} disableInnerContainer doc={doc} />
                 </div>
               )
             }
