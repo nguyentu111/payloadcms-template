@@ -12,6 +12,7 @@ import { PostContent } from './PostContent/config'
 import { PostTitle } from './PostTitle/config'
 import { Richtext } from './Richtext/config'
 import { Layout } from './Layout/config'
+import { PostAttributes } from './PostAttributes/config'
 export const clientBlocks = [
   Banner,
   BreadCrumb,
@@ -24,6 +25,7 @@ export const clientBlocks = [
   Richtext,
   PostTitle,
   PostContent,
+  PostAttributes,
   Layout,
 ]
 export const serverBlocks = [Archive, ArchiveCarousel]

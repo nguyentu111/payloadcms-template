@@ -18,6 +18,7 @@ import { CodeBlock } from './Code/Component'
 import { PostTitleBlock } from './PostTitle/Component'
 import { PostContentBlock } from './PostContent/Component'
 import { LayoutBlock } from './Layout/Component'
+import { PostAttributesBlock } from './PostAttributes/Component'
 // import {ArchiveBlock as AB, ArchiveCarouselBlock as , } fxrom './ArchirveCarousel/Component'
 const blockComponents = {
   [Archive.slug]: ArchiveBlock,
@@ -34,6 +35,7 @@ const blockComponents = {
   richText: RichTextBlock,
   hero: HeroBlock,
   row: LayoutBlock,
+  postAttributes: PostAttributesBlock,
 }
 
 export const RenderBlocks: React.FC<{

@@ -18,6 +18,7 @@ export interface Config {
     users: User;
     'single-pages': SinglePage;
     'post-types': PostType;
+    repeaters: Repeater;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -36,6 +37,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'single-pages': SinglePagesSelect<false> | SinglePagesSelect<true>;
     'post-types': PostTypesSelect<false> | PostTypesSelect<true>;
+    repeaters: RepeatersSelect<false> | RepeatersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -808,6 +810,7 @@ export interface SinglePage {
     | RichTextBlock
     | PostTitleBlock
     | PostContentBlock
+    | PostAttributesBlock
     | RowBlockType
     | ArchiveBlock
     | ArchiveCarouselBlock
@@ -895,7 +898,7 @@ export interface PostTitleBlock {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -904,6 +907,9 @@ export interface PostTitleBlock {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
     tablet?: {
       margin?: {
@@ -918,7 +924,7 @@ export interface PostTitleBlock {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -927,6 +933,9 @@ export interface PostTitleBlock {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
     pc?: {
       margin?: {
@@ -941,7 +950,7 @@ export interface PostTitleBlock {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -950,6 +959,9 @@ export interface PostTitleBlock {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
   };
   id?: string | null;
@@ -976,7 +988,7 @@ export interface PostContentBlock {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -985,6 +997,9 @@ export interface PostContentBlock {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
     tablet?: {
       margin?: {
@@ -999,7 +1014,7 @@ export interface PostContentBlock {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -1008,6 +1023,9 @@ export interface PostContentBlock {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
     pc?: {
       margin?: {
@@ -1022,7 +1040,7 @@ export interface PostContentBlock {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -1031,11 +1049,124 @@ export interface PostContentBlock {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
   };
   id?: string | null;
   blockName?: string | null;
   blockType: 'postContent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostAttributesBlock".
+ */
+export interface PostAttributesBlock {
+  content?: {
+    attribute?: ('publishedAt' | 'author' | 'categories' | '_status' | 'postType')[] | null;
+    repeater?: (string | null) | Repeater;
+  };
+  styles?: {
+    mobile?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
+    };
+    tablet?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
+    };
+    pc?: {
+      margin?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      padding?: {
+        top?: string | null;
+        bottom?: string | null;
+        left?: string | null;
+        right?: string | null;
+      };
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
+      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
+      fontSize?: string | null;
+      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
+      /**
+       * Use "hsl(var(...))" to reference to saved variable colors.
+       */
+      textColor?: string | null;
+      fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
+    };
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postAttributes';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "repeaters".
+ */
+export interface Repeater {
+  id: string;
+  title?: string | null;
+  fields?:
+    | {
+        type?: ('text' | 'image') | null;
+        image?: (string | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1067,6 +1198,7 @@ export interface RowBlockType {
       | RichTextBlock
       | PostTitleBlock
       | PostContentBlock
+      | PostAttributesBlock
     )[];
   };
   styles?: {
@@ -1083,7 +1215,7 @@ export interface RowBlockType {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -1092,6 +1224,9 @@ export interface RowBlockType {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
     tablet?: {
       margin?: {
@@ -1106,7 +1241,7 @@ export interface RowBlockType {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -1115,6 +1250,9 @@ export interface RowBlockType {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
     pc?: {
       margin?: {
@@ -1129,7 +1267,7 @@ export interface RowBlockType {
         left?: string | null;
         right?: string | null;
       };
-      width?: ('full' | 'container' | 'content' | 'auto') | null;
+      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
       alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
       fontSize?: string | null;
       textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
@@ -1138,6 +1276,9 @@ export interface RowBlockType {
        */
       textColor?: string | null;
       fontWeight?: number | null;
+      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
+      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
+      zIndex?: number | null;
     };
   };
   id?: string | null;
@@ -1348,6 +1489,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'post-types';
         value: string | PostType;
+      } | null)
+    | ({
+        relationTo: 'repeaters';
+        value: string | Repeater;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1780,6 +1925,7 @@ export interface SinglePagesSelect<T extends boolean = true> {
         richText?: T | RichTextBlockSelect<T>;
         postTitle?: T | PostTitleBlockSelect<T>;
         postContent?: T | PostContentBlockSelect<T>;
+        postAttributes?: T | PostAttributesBlockSelect<T>;
         row?: T | RowBlockTypeSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         archiveCarousel?: T | ArchiveCarouselBlockSelect<T>;
@@ -1850,6 +1996,9 @@ export interface PostTitleBlockSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
         tablet?:
           | T
@@ -1876,6 +2025,9 @@ export interface PostTitleBlockSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
         pc?:
           | T
@@ -1902,6 +2054,9 @@ export interface PostTitleBlockSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
       };
   id?: T;
@@ -1941,6 +2096,9 @@ export interface PostContentBlockSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
         tablet?:
           | T
@@ -1967,6 +2125,9 @@ export interface PostContentBlockSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
         pc?:
           | T
@@ -1993,6 +2154,114 @@ export interface PostContentBlockSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
+            };
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostAttributesBlock_select".
+ */
+export interface PostAttributesBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        attribute?: T;
+        repeater?: T;
+      };
+  styles?:
+    | T
+    | {
+        mobile?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
+            };
+        tablet?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
+            };
+        pc?:
+          | T
+          | {
+              margin?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              padding?:
+                | T
+                | {
+                    top?: T;
+                    bottom?: T;
+                    left?: T;
+                    right?: T;
+                  };
+              width?: T;
+              alignSelf?: T;
+              fontSize?: T;
+              textAlign?: T;
+              textColor?: T;
+              fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
       };
   id?: T;
@@ -2036,6 +2305,7 @@ export interface RowBlockTypeSelect<T extends boolean = true> {
               richText?: T | RichTextBlockSelect<T>;
               postTitle?: T | PostTitleBlockSelect<T>;
               postContent?: T | PostContentBlockSelect<T>;
+              postAttributes?: T | PostAttributesBlockSelect<T>;
             };
       };
   styles?:
@@ -2066,6 +2336,9 @@ export interface RowBlockTypeSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
         tablet?:
           | T
@@ -2092,6 +2365,9 @@ export interface RowBlockTypeSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
         pc?:
           | T
@@ -2118,6 +2394,9 @@ export interface RowBlockTypeSelect<T extends boolean = true> {
               textAlign?: T;
               textColor?: T;
               fontWeight?: T;
+              display?: T;
+              position?: T;
+              zIndex?: T;
             };
       };
   id?: T;
@@ -2131,6 +2410,22 @@ export interface PostTypesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "repeaters_select".
+ */
+export interface RepeatersSelect<T extends boolean = true> {
+  title?: T;
+  fields?:
+    | T
+    | {
+        type?: T;
+        image?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

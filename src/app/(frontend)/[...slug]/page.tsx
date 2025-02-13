@@ -69,16 +69,17 @@ export default async function Page({ params: paramsPromise }: Args) {
   if (!page) {
     const post = await queryPostBySlug({ slug: _slug })
     if (!post) return <PayloadRedirects url={url} />
-    const postType = post.postType as string | null
+    const postType = post.postType as PostType | null
     if (postType) {
       const template = (await getCachedSinglePage(
         {
           postTypes: {
-            contains: postType,
+            contains: postType.id,
           },
         },
-        postType,
+        postType.id,
       )()) as SinglePage
+      console.log({ template, postType })
       if (template) {
         return (
           <DocumentProvider document={post}>

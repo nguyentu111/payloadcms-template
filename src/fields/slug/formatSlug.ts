@@ -14,14 +14,14 @@ export const formatSlug = (val: string): string =>
 export const formatSlugHook =
   (fallback: string): FieldHook =>
   ({ data, operation, value }) => {
-    if (typeof value === 'string') {
+    if (typeof value === 'string' && data?.slugLock === true) {
       return formatSlug(value)
     }
 
     if (operation === 'create' || !data?.slug) {
       const fallbackData = data?.[fallback] || data?.[fallback]
 
-      if (fallbackData && typeof fallbackData === 'string') {
+      if (fallbackData && typeof fallbackData === 'string' && data?.slugLock === true) {
         return formatSlug(fallbackData)
       }
     }

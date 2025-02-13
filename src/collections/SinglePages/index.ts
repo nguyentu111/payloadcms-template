@@ -4,7 +4,9 @@ import { revalidateDelete, revalidateSinglePage } from './hook/revalidateSingleP
 
 export const SinglePage: CollectionConfig = {
   slug: 'single-pages',
-  access: {},
+  access: {
+    read: () => true,
+  },
   defaultPopulate: {
     postTypes: true,
     blocks: true,

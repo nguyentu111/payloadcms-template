@@ -26,6 +26,7 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
+import { appendPostTypeToSlug } from './hooks/appendPostTypeToSlug'
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
@@ -219,6 +220,7 @@ export const Posts: CollectionConfig<'posts'> = {
   ],
   hooks: {
     afterChange: [revalidatePost],
+    beforeChange: [],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
   },

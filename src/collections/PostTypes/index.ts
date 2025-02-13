@@ -10,6 +10,9 @@ export const PostTypes: CollectionConfig<'post-types'> = {
     title: true,
     slug: true,
   },
+  access: {
+    read: () => true,
+  },
   fields: [
     {
       name: 'title',

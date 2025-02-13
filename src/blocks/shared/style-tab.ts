@@ -53,13 +53,17 @@ const padding: Field = {
     },
   ],
 }
-const widthSelect: Field = {
+const width: Field = {
   name: 'width',
   type: 'select',
   options: [
     {
       label: 'Full',
       value: 'full',
+    },
+    {
+      label: 'Fit Content',
+      value: 'fitContent',
     },
     {
       label: 'Container',
@@ -70,12 +74,24 @@ const widthSelect: Field = {
       value: 'content',
     },
     {
+      label: 'Title',
+      value: 'title',
+    },
+    {
       label: 'Auto',
       value: 'auto',
     },
   ],
 }
-const alignSelfSelect: Field = {
+const maxWidth: Field = {
+  name: 'maxWidth',
+  type: 'text',
+}
+const minWidth: Field = {
+  name: 'minWidth',
+  type: 'text',
+}
+const alignSelf: Field = {
   name: 'alignSelf',
   type: 'select',
   options: [
@@ -138,6 +154,58 @@ const fontWeight: Field = {
   name: 'fontWeight',
   type: 'number',
 }
+const display: Field = {
+  name: 'display',
+  type: 'select',
+  options: [
+    {
+      label: 'Block',
+      value: 'block',
+    },
+    {
+      label: 'Inline',
+      value: 'inline',
+    },
+    {
+      label: 'Inline Block',
+      value: 'inline-block',
+    },
+    {
+      label: 'None',
+      value: 'none',
+    },
+  ],
+}
+const position: Field = {
+  name: 'position',
+  type: 'select',
+  options: [
+    {
+      label: 'Static',
+      value: 'static',
+    },
+    {
+      label: 'Relative',
+      value: 'relative',
+    },
+    {
+      label: 'Absolute',
+      value: 'absolute',
+    },
+    {
+      label: 'Fixed',
+      value: 'fixed',
+    },
+  ],
+}
+const zIndex: Field = {
+  name: 'zIndex',
+  type: 'number',
+}
+const backGroundColor: Field = {
+  name: 'backGroundColor',
+  type: 'text',
+}
 export const styleTab: Tab = {
   name: 'styles',
   fields: [
@@ -149,8 +217,9 @@ export const styleTab: Tab = {
           fields: [
             margin,
             padding,
-            { type: 'row', fields: [widthSelect, alignSelfSelect, fontSize] },
+            { type: 'row', fields: [width, alignSelf, fontSize] },
             { type: 'row', fields: [textAlign, textColor, fontWeight] },
+            { type: 'row', fields: [display, position, zIndex] },
           ],
         },
         {
@@ -158,8 +227,9 @@ export const styleTab: Tab = {
           fields: [
             margin,
             padding,
-            { type: 'row', fields: [widthSelect, alignSelfSelect, fontSize] },
+            { type: 'row', fields: [width, alignSelf, fontSize] },
             { type: 'row', fields: [textAlign, textColor, fontWeight] },
+            { type: 'row', fields: [display, position, zIndex] },
           ],
         },
         {
@@ -167,8 +237,9 @@ export const styleTab: Tab = {
           fields: [
             margin,
             padding,
-            { type: 'row', fields: [widthSelect, alignSelfSelect, fontSize] },
+            { type: 'row', fields: [width, alignSelf, fontSize] },
             { type: 'row', fields: [textAlign, textColor, fontWeight] },
+            { type: 'row', fields: [display, position, zIndex] },
           ],
         },
       ],

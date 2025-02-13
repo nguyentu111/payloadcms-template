@@ -1,23 +1,21 @@
-'use client'
 import {
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { BreadCrumbBlock } from '@/payload-types'
-import { useCurrentDocument } from '@/providers/CurrentDocument'
+import { BreadCrumbBlock, Page, Post, PostType } from '@/payload-types'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
 
-export function BreadcrumbBlock({ haveContainer }: BreadCrumbBlock) {
-  const currentDocument = useCurrentDocument()
-  if (!currentDocument) return null
-  const { title, slug } = currentDocument
-  console.log(currentDocument)
+type Props = BreadCrumbBlock & {
+  doc: Post | Page
+}
+export function BreadcrumbBlock({ haveContainer, doc }: Props) {
+  if (!doc) return null
+  const { title } = doc
 
   return (
     <div className={cn({ ' bg-[#f5f5f5] py-3': haveContainer })}>
@@ -30,6 +28,18 @@ export function BreadcrumbBlock({ haveContainer }: BreadCrumbBlock) {
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
+            {docIsPost(doc) && (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href={(doc.postType as PostType).slug}>
+                      {(doc.postType as PostType).title}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            )}
             <BreadcrumbItem>
               <BreadcrumbPage>{title}</BreadcrumbPage>
             </BreadcrumbItem>
@@ -39,3 +49,5 @@ export function BreadcrumbBlock({ haveContainer }: BreadCrumbBlock) {
     </div>
   )
 }
+const docIsPost = (doc: Post | Page): doc is Post =>
+  'postType' in doc && typeof doc.postType === 'object'

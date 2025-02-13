@@ -11,6 +11,7 @@ import { PostContent } from '../PostContent/config'
 import { PostTitle } from '../PostTitle/config'
 import { Richtext } from '../Richtext/config'
 import { styleTab } from '../shared/style-tab'
+import { PostAttributes } from '../PostAttributes/config'
 export const Layout: Block = {
   slug: 'row',
   interfaceName: 'rowBlockType',
@@ -159,6 +160,7 @@ export const Layout: Block = {
                 Richtext,
                 PostTitle,
                 PostContent,
+                PostAttributes,
               ],
             },
           ],
