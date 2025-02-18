@@ -1,14 +1,25 @@
 import type { Block } from 'payload'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { styleTab } from '../shared/style-tab'
 
 export const Row: Block = {
   slug: 'youtube',
-  interfaceName: 'youtubeType',
+  interfaceName: 'youtubeBlock',
   fields: [
     {
-      name: 'videoLink',
-      type: 'text',
-      required: true,
+      type: 'tabs',
+      tabs: [
+        {
+          name: 'content',
+          fields: [
+            {
+              name: 'videoLink',
+              type: 'text',
+              required: true,
+            },
+          ],
+        },
+        styleTab,
+      ],
     },
   ],
 }

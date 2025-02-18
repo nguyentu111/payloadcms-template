@@ -53,7 +53,6 @@ export const TextJSXConverter: JSXConverters<SerializedTextNode> = {
     if (node.format & IS_SUPERSCRIPT) {
       text = <sup>{text}</sup>
     }
-    DefaultTextJSXConverter.text
     if (node.style) {
       const style: React.CSSProperties = {}
       let match = node.style.match(/(?:^|;)\s?background-color: ([^;]+)/)

@@ -1,5 +1,6 @@
 import tailwindcssAnimate from 'tailwindcss-animate'
 import typography from '@tailwindcss/typography'
+import { cssVariables } from './src/cssVariables'
 const plugin = require('tailwindcss/plugin')
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -46,10 +47,10 @@ const config = {
         xl: '2rem',
       },
       screens: {
-        xl: '76rem',
-        lg: '60rem',
-        md: '48rem',
-        sm: '40rem',
+        xl: cssVariables.breakpoints.xl + 'px',
+        lg: cssVariables.breakpoints.lg + 'px',
+        md: cssVariables.breakpoints.md + 'px',
+        sm: cssVariables.breakpoints.sm + 'px',
       },
     },
     extend: {

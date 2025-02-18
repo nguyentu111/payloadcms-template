@@ -2,9 +2,12 @@ import type { Field, GlobalConfig, Tab } from 'payload'
 
 import { revalidateHeader } from './hooks/revalidateHeader'
 import { Topbar } from './Topbar/config'
-import { MegaMenu } from './MegaMenu/config'
 import { appearanceOptions } from '@/fields/link'
 import deepMerge from '@/utilities/deepMerge'
+import { clientBlocks, serverBlocks } from '@/blocks'
+import { styleTab } from '@/blocks/shared/style-tab'
+import { RecursiveContainer } from '@/blocks/Container/config'
+import { generateNonPostTypePreviewPath } from '@/utilities/generatePreviewPath'
 export const link = ({ disableLabel = false, overrides = {} } = {}) => {
   const linkResult: Tab = {
     name: 'link',
@@ -131,23 +134,18 @@ const NavItems: Tab = {
               name: 'menu',
               fields: [
                 {
-                  name: 'addMenu',
-                  type: 'checkbox',
-                  label: 'Add menu',
-                },
-                {
                   name: 'anchoringToHeader',
                   type: 'checkbox',
                   label: 'Anchoring to header',
-                  admin: {
-                    condition: (_, siblingData) => {
-                      return siblingData.addMenu
-                    },
-                  },
                 },
-                MegaMenu,
+                {
+                  name: 'blocks',
+                  type: 'blocks',
+                  blocks: [...clientBlocks, RecursiveContainer(10)],
+                },
               ],
             },
+            styleTab,
           ],
         },
       ],
@@ -160,14 +158,38 @@ export const Header: GlobalConfig = {
   access: {
     read: () => true,
   },
+  admin: {
+    livePreview: {
+      url: ({ data, req }) => {
+        const path = generateNonPostTypePreviewPath({
+          slug: 'header',
+          req,
+        })
 
+        return path
+      },
+    },
+    preview: (data, { req }) =>
+      generateNonPostTypePreviewPath({
+        slug: 'header',
+        req,
+      }),
+  },
   fields: [
     {
       type: 'tabs',
-      tabs: [Topbar, NavItems],
+      tabs: [Topbar, NavItems, styleTab],
     },
   ],
   hooks: {
     afterChange: [revalidateHeader],
+  },
+  versions: {
+    drafts: {
+      autosave: {
+        interval: 100, // We set this interval for optimal live preview
+      },
+      schedulePublish: true,
+    },
   },
 }

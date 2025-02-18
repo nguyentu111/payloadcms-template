@@ -17,8 +17,8 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { SinglePage } from './collections/SinglePages'
-import { PostTypes } from './collections/PostTypes'
 import { Repeaters } from './collections/Repeaters'
+import { Templates } from './collections/Templates'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -64,9 +64,9 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, SinglePage, PostTypes, Repeaters],
+  collections: [Pages, Posts, Media, Categories, Users, SinglePage, Repeaters, Templates],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Footer, Header],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

@@ -6,48 +6,44 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { BreadCrumbBlock, Page, Post, PostType } from '@/payload-types'
+import { WrapperStyles } from '@/components/WrapperStyles'
+import { BreadCrumbBlock, Page, Post } from '@/payload-types'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
 
 type Props = BreadCrumbBlock & {
   doc: Post | Page
 }
-export function BreadcrumbBlock({ haveContainer, doc }: Props) {
+export function BreadcrumbBlock({ doc, content, styles }: Props) {
   if (!doc) return null
-  const { title } = doc
-
+  const { title, breadcrumbs } = doc as Page
   return (
-    <div className={cn({ ' bg-[#f5f5f5] py-3': haveContainer })}>
-      <div className={cn({ container: haveContainer })}>
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/">Trang chủ</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            {docIsPost(doc) && (
+    <WrapperStyles styles={styles}>
+      <Breadcrumb className="bread-crumb-inner">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Trang chủ</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          {breadcrumbs &&
+            breadcrumbs.length > 0 &&
+            breadcrumbs.slice(0, -1).map((b) => (
               <>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href={(doc.postType as PostType).slug}>
-                      {(doc.postType as PostType).title}
-                    </Link>
+                    <Link href={b.url!}>{b.label}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
               </>
-            )}
-            <BreadcrumbItem>
-              <BreadcrumbPage>{title}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-    </div>
+            ))}
+          <BreadcrumbItem>
+            <BreadcrumbPage>{title}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    </WrapperStyles>
   )
 }
-const docIsPost = (doc: Post | Page): doc is Post =>
-  'postType' in doc && typeof doc.postType === 'object'

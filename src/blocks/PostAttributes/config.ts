@@ -14,24 +14,13 @@ export const PostAttributes: Block = {
             {
               name: 'attribute',
               type: 'select',
-              hasMany: true,
+              required: true,
               options: [
+                { label: 'Title', value: 'title' },
                 { label: 'Published At', value: 'publishedAt' },
-                { label: 'Author', value: 'author' },
-                { label: 'Categories', value: 'categories' },
-                { label: 'Status', value: '_status' },
-                { label: 'Post type', value: 'postType' },
+                { label: 'Author', value: 'populatedAuthors' },
+                { label: 'Content', value: 'content' },
               ],
-            },
-            {
-              name: 'repeater',
-              type: 'relationship',
-              relationTo: 'repeaters',
-              admin: {
-                components: {
-                  afterInput: ['@/fields/repeater/RepeaterComponent.tsx'],
-                },
-              },
             },
           ],
         },

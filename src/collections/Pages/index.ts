@@ -1,14 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
+import { slugField } from '@/fields/slug'
+import { hero } from '@/heros/config'
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-import { Archive } from '../../blocks/ArchiveBlock/config'
-import { CallToAction } from '../../blocks/CallToAction/config'
-import { Content } from '../../blocks/Content/config'
-import { FormBlock } from '../../blocks/Form/config'
-import { MediaBlock } from '../../blocks/MediaBlock/config'
-import { hero } from '@/heros/config'
-import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
@@ -20,9 +15,10 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { BreadCrumb } from '@/blocks/BreadCrumb/config'
-import { Hero } from '@/blocks/Hero'
-import { ArchiveCarousel } from '@/blocks/ArchirveCarousel/config'
+import { clientBlocks, serverBlocks } from '@/blocks'
+import { RecursiveContainer } from '@/blocks/Container/config'
+
+import { Page } from '@/payload-types'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -48,10 +44,16 @@ export const Pages: CollectionConfig<'pages'> = {
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) => {
+        const page = data as Page
         const path = generatePreviewPath({
-          slug: typeof data?.slug === 'string' ? data.slug : '',
+          slug: page.breadcrumbs
+            ? (page.breadcrumbs.at(-1)?.url ?? '')
+            : typeof data?.slug === 'string'
+              ? data.slug
+              : '',
           collection: 'pages',
           req,
+          breadcrumbs: page.breadcrumbs,
         })
 
         return path
@@ -83,16 +85,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [
-                CallToAction,
-                Content,
-                MediaBlock,
-                Archive,
-                FormBlock,
-                BreadCrumb,
-                Hero,
-                ArchiveCarousel,
-              ],
+              blocks: [...clientBlocks, ...serverBlocks, RecursiveContainer(10, 0)],
               required: true,
               admin: {
                 initCollapsed: true,

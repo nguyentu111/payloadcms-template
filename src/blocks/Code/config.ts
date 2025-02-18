@@ -1,33 +1,45 @@
 import type { Block } from 'payload'
+import { styleTab } from '../shared/style-tab'
 
 export const Code: Block = {
   slug: 'code',
   interfaceName: 'CodeBlock',
   fields: [
     {
-      name: 'language',
-      type: 'select',
-      defaultValue: 'typescript',
-      options: [
+      type: 'tabs',
+      tabs: [
         {
-          label: 'Typescript',
-          value: 'typescript',
+          name: 'content',
+          fields: [
+            {
+              name: 'language',
+              type: 'select',
+              defaultValue: 'typescript',
+              options: [
+                {
+                  label: 'Typescript',
+                  value: 'typescript',
+                },
+                {
+                  label: 'Javascript',
+                  value: 'javascript',
+                },
+                {
+                  label: 'CSS',
+                  value: 'css',
+                },
+              ],
+            },
+            {
+              name: 'code',
+              type: 'code',
+              label: false,
+              required: true,
+            },
+          ],
         },
-        {
-          label: 'Javascript',
-          value: 'javascript',
-        },
-        {
-          label: 'CSS',
-          value: 'css',
-        },
+        styleTab,
       ],
-    },
-    {
-      name: 'code',
-      type: 'code',
-      label: false,
-      required: true,
     },
   ],
 }

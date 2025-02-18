@@ -4,28 +4,27 @@ import { Banner } from './Banner/config'
 import { BreadCrumb } from './BreadCrumb/config'
 import { CallToAction } from './CallToAction/config'
 import { Code } from './Code/config'
-import { Content } from './Content/config'
 import { FormBlock } from './Form/config'
 import { Hero } from './Hero'
 import { MediaBlock } from './MediaBlock/config'
-import { PostContent } from './PostContent/config'
-import { PostTitle } from './PostTitle/config'
-import { Richtext } from './Richtext/config'
-import { Layout } from './Layout/config'
 import { PostAttributes } from './PostAttributes/config'
+import { Text } from './Text/config'
+import { Link } from './Link/config'
+import { Template } from './Template/config'
+import { RichText } from './Richtext/config'
 export const clientBlocks = [
   Banner,
   BreadCrumb,
   CallToAction,
   Code,
-  Content,
   FormBlock,
   Hero,
   MediaBlock,
-  Richtext,
-  PostTitle,
-  PostContent,
   PostAttributes,
-  Layout,
+  Text,
+  Template,
+  Link,
+  RichText,
 ]
+
 export const serverBlocks = [Archive, ArchiveCarousel]

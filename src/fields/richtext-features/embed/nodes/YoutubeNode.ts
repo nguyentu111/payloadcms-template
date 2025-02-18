@@ -73,7 +73,7 @@ export class YouTubeNode extends EmbedNode {
       }
     }
 
-    return YoutubeComponent({ id: this.__id, className })
+    return YoutubeComponent({ id: this.__id })
   }
 
   exportJSON(): SerializedEmbedNode {

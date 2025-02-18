@@ -6,8 +6,6 @@ import { GeistSans } from 'geist/font/sans'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
-import { Footer } from '@/globals/Footer/Component'
-import { Header } from '@/globals/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
@@ -16,6 +14,7 @@ import { Roboto } from 'next/font/google'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { ScrollToTop } from '@/components/ScrollToTop'
+import StyledComponentsRegistry from '@/components/StyledComponentsRegistry'
 
 const roboto = Roboto({
   weight: ['400', '700', '500'],
@@ -37,18 +36,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
-        <Providers>
-          <AdminBar
-            adminBarProps={{
-              preview: isEnabled,
-            }}
-          />
+        <StyledComponentsRegistry>
+          <Providers>
+            <AdminBar
+              adminBarProps={{
+                preview: isEnabled,
+              }}
+            />
 
-          <Header />
-          {children}
-          <Footer />
-          <ScrollToTop />
-        </Providers>
+            {children}
+            <ScrollToTop />
+          </Providers>
+        </StyledComponentsRegistry>
       </body>
     </html>
   )

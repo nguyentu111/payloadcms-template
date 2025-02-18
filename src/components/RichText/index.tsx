@@ -11,7 +11,7 @@ import {
   LinkJSXConverter,
   RichText as RichTextWithoutBlocks,
 } from '@payloadcms/richtext-lexical/react'
-import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
+import { CodeBlock as CodeBlockProps } from '@/payload-types'
 import type {
   BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
@@ -23,6 +23,7 @@ import { cn } from '@/utilities/ui'
 import { TextJSXConverter } from './converters'
 import { YoutubeJSXConverter } from '@/fields/richtext-features/embed/converters/jsx/YoutubeJSXConverter'
 import { VimeoJSXConverter } from '@/fields/richtext-features/embed/converters/jsx/VimeoJSXConverter'
+import { CodeBlock } from '@/blocks/Code/Component'
 
 type NodeTypes =
   | DefaultNodeTypes

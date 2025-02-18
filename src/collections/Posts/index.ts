@@ -26,7 +26,6 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
-import { appendPostTypeToSlug } from './hooks/appendPostTypeToSlug'
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
   access: {
@@ -42,7 +41,6 @@ export const Posts: CollectionConfig<'posts'> = {
     title: true,
     slug: true,
     categories: true,
-    postType: true,
     meta: {
       image: true,
       description: true,
@@ -125,11 +123,6 @@ export const Posts: CollectionConfig<'posts'> = {
               type: 'relationship',
               relationTo: 'categories',
               hasMany: true,
-            },
-            {
-              name: 'postType',
-              type: 'relationship',
-              relationTo: 'post-types',
             },
           ],
           label: 'Meta',

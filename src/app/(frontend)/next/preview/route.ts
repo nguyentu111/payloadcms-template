@@ -1,6 +1,6 @@
 import { draftMode } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getPayload, type PayloadRequest } from 'payload'
+import { getPayload, GlobalSlug, type PayloadRequest } from 'payload'
 import configPromise from '@payload-config'
 import { CollectionSlug } from 'payload'
 
@@ -18,7 +18,7 @@ export async function GET(
   const path = searchParams.get('path')
   const collection = searchParams.get('collection') as CollectionSlug
   const slug = searchParams.get('slug')
-
+  console.log({ path, collection, slug })
   const previewSecret = searchParams.get('previewSecret')
 
   if (previewSecret) {
@@ -28,12 +28,12 @@ export async function GET(
       return new Response('No path provided', { status: 404 })
     }
 
-    if (!collection) {
-      return new Response('No path provided', { status: 404 })
+    if (!collection && !(slug == 'header' || slug == 'footer')) {
+      return new Response('No collection provided', { status: 404 })
     }
 
     if (!slug) {
-      return new Response('No path provided', { status: 404 })
+      return new Response('No slug provided', { status: 404 })
     }
 
     if (!path.startsWith('/')) {
@@ -62,23 +62,32 @@ export async function GET(
 
     // Verify the given slug exists
     try {
-      const docs = await payload.find({
-        collection,
-        draft: true,
-        limit: 1,
-        // pagination: false reduces overhead if you don't need totalDocs
-        pagination: false,
-        depth: 0,
-        select: {},
-        where: {
-          slug: {
-            equals: slug,
+      if (!collection) {
+        const globalSlug = slug as GlobalSlug
+        const docs = await payload.findGlobal({
+          slug: globalSlug,
+          depth: 1,
+          draft: true,
+        })
+      } else {
+        const docs = await payload.find({
+          collection,
+          draft: true,
+          limit: 1,
+          // pagination: false reduces overhead if you don't need totalDocs
+          pagination: false,
+          depth: 0,
+          select: {},
+          where: {
+            slug: {
+              equals: slug,
+            },
           },
-        },
-      })
+        })
 
-      if (!docs.docs.length) {
-        return new Response('Document not found', { status: 404 })
+        if (!docs.docs.length) {
+          return new Response('Document not found', { status: 404 })
+        }
       }
     } catch (error) {
       payload.logger.error({ err: error }, 'Error verifying token for live preview')

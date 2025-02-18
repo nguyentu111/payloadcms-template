@@ -4,7 +4,6 @@ import type { Page, Post, SinglePage } from '@/payload-types'
 
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
-import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { RichTextBlock } from './Richtext/Component'
@@ -12,36 +11,38 @@ import { BreadcrumbBlock } from './BreadCrumb/Component'
 import { HeroBlock } from './Hero/Component'
 import { ArchiveCarouselBlock } from './ArchirveCarousel/Component'
 import { BannerBlock } from './Banner/Component'
-import { Archive } from './ArchiveBlock/config'
-import { Content } from './Content/config'
+
 import { CodeBlock } from './Code/Component'
-import { PostTitleBlock } from './PostTitle/Component'
-import { PostContentBlock } from './PostContent/Component'
-import { LayoutBlock } from './Layout/Component'
+import { ContainerBlock } from './Container/Component'
 import { PostAttributesBlock } from './PostAttributes/Component'
+import { TemplateBlock } from './Template/Component'
+import { LinkBlock } from './Link/Component'
+import { TextBlock } from './Text/Component'
+import { getCachedGlobal } from '@/utilities/getGlobals'
+import { DataFromGlobalSlug } from 'payload'
 // import {ArchiveBlock as AB, ArchiveCarouselBlock as , } fxrom './ArchirveCarousel/Component'
 const blockComponents = {
-  [Archive.slug]: ArchiveBlock,
+  archive: ArchiveBlock,
   archiveCarousel: ArchiveCarouselBlock,
   banner: BannerBlock,
   breadCrumb: BreadcrumbBlock,
   code: CodeBlock,
-  [Content.slug]: ContentBlock,
   cta: CallToActionBlock,
-  postTitle: PostTitleBlock,
-  postContent: PostContentBlock,
   mediaBlock: MediaBlock,
   formBlock: FormBlock,
   richText: RichTextBlock,
   hero: HeroBlock,
-  row: LayoutBlock,
+  container: ContainerBlock,
   postAttributes: PostAttributesBlock,
+  template: TemplateBlock,
+  link: LinkBlock,
+  text: TextBlock,
 }
 
 export const RenderBlocks: React.FC<{
-  blocks: SinglePage['blocks']
+  blocks?: SinglePage['blocks'] | null
   doc?: Page | Post
-}> = (props) => {
+}> = async (props) => {
   const { blocks, doc } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
@@ -57,10 +58,10 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               return (
-                <div key={index}>
-                  {/* ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer doc={doc} />
-                </div>
+                <React.Fragment key={index}>
+                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
+                  <Block {...block} disableInnerContainer doc={doc} renderer={RenderBlocks} />
+                </React.Fragment>
               )
             }
           }

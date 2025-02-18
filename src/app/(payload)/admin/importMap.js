@@ -19,6 +19,9 @@ import { AlignFeatureClient as AlignFeatureClient_e70f5e05f09f93e00b997edb1ef0c8
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { SuperscriptFeatureClient as SuperscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { SubscriptFeatureClient as SubscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { FontColorFeatureClient as FontColorFeatureClient_7762508577ba2139dc86b61d98013fd0 } from '@/fields/richtext-features/text-color/feature.client.ts'
+import { BackgroundColorFeatureClient as BackgroundColorFeatureClient_6dbc4033c0624e8ed4ba9f51dd279b73 } from '@/fields/richtext-features/background-color/feature.client.ts'
+import { FontSizeFeatureClient as FontSizeFeatureClient_df7cb8e4ed608992b03985b8c5582399 } from '@/fields/richtext-features/font-size/feature.client.ts'
 import { default as default_c8d5074fbd4b0731af44265b706a918e } from '@/fields/richtext-features/embed/features/youtube/feature.client.ts'
 import { default as default_807bd4a8a1879d27a5d75fc7727fe47b } from '@/fields/richtext-features/embed/features/vimeo/feature.client.ts'
 import { IndentFeatureClient as IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
@@ -29,7 +32,6 @@ import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from '@/fields/slug/SlugComponent'
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
-import { default as default_cf65c79d4cd85c9948c1db7f6c9adce3 } from '@/fields/repeater/RepeaterComponent.tsx'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { RowLabel as RowLabel_e5f2ea2a3ff3620de63526e885e3b034 } from '@/globals/Footer/RowLabel'
@@ -58,6 +60,9 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#SuperscriptFeatureClient": SuperscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#SubscriptFeatureClient": SubscriptFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@/fields/richtext-features/text-color/feature.client.ts#FontColorFeatureClient": FontColorFeatureClient_7762508577ba2139dc86b61d98013fd0,
+  "@/fields/richtext-features/background-color/feature.client.ts#BackgroundColorFeatureClient": BackgroundColorFeatureClient_6dbc4033c0624e8ed4ba9f51dd279b73,
+  "@/fields/richtext-features/font-size/feature.client.ts#FontSizeFeatureClient": FontSizeFeatureClient_df7cb8e4ed608992b03985b8c5582399,
   "@/fields/richtext-features/embed/features/youtube/feature.client.ts#default": default_c8d5074fbd4b0731af44265b706a918e,
   "@/fields/richtext-features/embed/features/vimeo/feature.client.ts#default": default_807bd4a8a1879d27a5d75fc7727fe47b,
   "@payloadcms/richtext-lexical/client#IndentFeatureClient": IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
@@ -68,7 +73,6 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@/fields/slug/SlugComponent#SlugComponent": SlugComponent_92cc057d0a2abb4f6cf0307edf59f986,
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  "@/fields/repeater/RepeaterComponent.tsx#default": default_cf65c79d4cd85c9948c1db7f6c9adce3,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "@/globals/Footer/RowLabel#RowLabel": RowLabel_e5f2ea2a3ff3620de63526e885e3b034,

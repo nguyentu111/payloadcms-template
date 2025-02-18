@@ -1,21 +1,19 @@
 import React from 'react'
 
 import { Code } from './Component.client'
-
-export type CodeBlockProps = {
-  code: string
-  language?: string
-  blockType: 'code'
-}
+import { WrapperStyles } from '@/components/WrapperStyles'
+import { CodeBlock as CodeBlockProps } from '@/payload-types'
 
 type Props = CodeBlockProps & {
   className?: string
 }
 
-export const CodeBlock: React.FC<Props> = ({ className, code, language }) => {
+export const CodeBlock: React.FC<Props> = ({ className, content: { code, language }, styles }) => {
   return (
-    <div className={[className, 'not-prose'].filter(Boolean).join(' ')}>
-      <Code code={code} language={language} />
-    </div>
+    <WrapperStyles styles={styles}>
+      <div className={[className, 'not-prose'].filter(Boolean).join(' ')}>
+        <Code code={code} language={language ?? undefined} />
+      </div>
+    </WrapperStyles>
   )
 }

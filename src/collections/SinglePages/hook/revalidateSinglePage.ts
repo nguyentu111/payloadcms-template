@@ -14,11 +14,9 @@ export const revalidateSinglePage: CollectionAfterChangeHook<SinglePage> = ({
     const unionedPostTypes = lodash.union(doc.postTypes, previousDoc.postTypes)
 
     unionedPostTypes.forEach((postType) => {
-      payload.logger.info(
-        `Revalidating single page with tag: ${`single-pages_${typeof postType === 'string' ? postType : postType.id}`}`,
-      )
+      payload.logger.info(`Revalidating single page with tag: ${`single-pages_${postType}`}`)
 
-      revalidateTag(`single-pages_${typeof postType === 'string' ? postType : postType.id}`)
+      revalidateTag(`single-pages_${postType}`)
     })
   }
   return doc
@@ -31,10 +29,8 @@ export const revalidateDelete: CollectionAfterDeleteHook<SinglePage> = ({
   if (!context.disableRevalidate) {
     doc.postTypes &&
       doc.postTypes.forEach((postType) => {
-        payload.logger.info(
-          `Revalidating single page with tag: ${`single-pages_${typeof postType === 'string' ? postType : postType.id}`}`,
-        )
-        revalidateTag(`single-pages_${typeof postType === 'string' ? postType : postType.id}`)
+        payload.logger.info(`Revalidating single page with tag: ${`single-pages_${postType}`}`)
+        revalidateTag(`single-pages_${postType}`)
       })
   }
 

@@ -1,14 +1,13 @@
 import { clientBlocks, serverBlocks } from '@/blocks'
+import { RecursiveContainer } from '@/blocks/Container/config'
 import { CollectionConfig } from 'payload'
 import { revalidateDelete, revalidateSinglePage } from './hook/revalidateSinglePage'
-
 export const SinglePage: CollectionConfig = {
   slug: 'single-pages',
   access: {
     read: () => true,
   },
   defaultPopulate: {
-    postTypes: true,
     blocks: true,
   },
   hooks: {
@@ -18,16 +17,20 @@ export const SinglePage: CollectionConfig = {
   fields: [
     {
       name: 'postTypes',
-      type: 'relationship',
-      relationTo: 'post-types',
+      type: 'select',
       hasMany: true,
-      required: true,
+      options: [
+        {
+          label: 'Posts',
+          value: 'posts',
+        },
+      ],
     },
     {
       name: 'blocks',
       type: 'blocks',
       required: true,
-      blocks: [...clientBlocks, ...serverBlocks],
+      blocks: [...clientBlocks, ...serverBlocks, RecursiveContainer(10, 0)],
     },
   ],
 }

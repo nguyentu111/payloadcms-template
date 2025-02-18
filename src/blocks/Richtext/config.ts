@@ -1,34 +1,40 @@
-import type { Block, Field } from 'payload'
+import type { Block } from 'payload'
+import { styleTab } from '../shared/style-tab'
 
-import {
-  FixedToolbarFeature,
-  HeadingFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
-
-import { link } from '@/fields/link'
-
-export const Richtext: Block = {
+export const RichText: Block = {
   slug: 'richText',
-  interfaceName: 'richTextBlock',
+  interfaceName: 'RichTextBlock',
 
   fields: [
     {
-      name: 'richText',
-      type: 'richText',
-      editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [
-            ...rootFeatures,
-            HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4'] }),
-            FixedToolbarFeature(),
-            InlineToolbarFeature(),
-          ]
+      type: 'tabs',
+      tabs: [
+        {
+          name: 'content',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'enableProse',
+                  type: 'checkbox',
+                },
+                {
+                  name: 'enableGutter',
+                  type: 'checkbox',
+                },
+              ],
+            },
+            {
+              name: 'richText',
+              type: 'richText',
+              label: false,
+              required: true,
+            },
+          ],
         },
-      }),
-      label: false,
-      required: true,
+        styleTab,
+      ],
     },
   ],
 }

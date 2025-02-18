@@ -1,19 +1,21 @@
-import type { Post, ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
+import type { Post, ArchiveBlock as ArchiveBlockProps, Page } from '@/payload-types'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
-import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { WrapperStyles } from '@/components/WrapperStyles'
+import RichText from '@/components/RichText'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
     id?: string
+    doc: Page | Post
   }
 > = async (props) => {
-  const { id, categories, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
-
+  const { content, styles, id, doc } = props
+  const { categories, introContent, limit: limitFromProps, populateBy, selectedDocs } = content!
   const limit = limitFromProps || 3
 
   let posts: Post[] = []
@@ -53,13 +55,11 @@ export const ArchiveBlock: React.FC<
   }
 
   return (
-    <div className="my-16" id={`block-${id}`}>
+    <WrapperStyles styles={styles}>
       {introContent && (
-        <div className="container mb-16">
-          <RichText className="ml-0 max-w-[48rem]" data={introContent} enableGutter={false} />
-        </div>
+        <RichText data={introContent} enableGutter={false} className="mb-8 lg:mb-16" />
       )}
       <CollectionArchive posts={posts} />
-    </div>
+    </WrapperStyles>
   )
 }

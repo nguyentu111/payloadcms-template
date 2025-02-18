@@ -1,29 +1,32 @@
 'use client'
-import { useHeaderTheme } from '@/providers/HeaderTheme'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 
 import type { Header } from '@/payload-types'
 
+import { WrapperStyles } from '@/components/WrapperStyles'
 import { useWindowScroll } from '@/hooks/useWindowScroll'
 import { SearchIcon } from 'lucide-react'
-import { HeaderNav } from './Nav'
-import { Topbar } from './Topbar/component'
-import gsap from 'gsap'
 import { AnimatePresence, motion } from 'motion/react'
+import { HeaderNav } from './Nav'
 interface HeaderClientProps {
   data: Header
+  renderedMenus: (React.JSX.Element | null | undefined)[] | undefined
+  renderedTopbar: React.JSX.Element
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = ({
+  data,
+  renderedMenus,
+  renderedTopbar,
+}) => {
   const { scrollY } = useWindowScroll()
   const showStickyNav = scrollY > 250
   return (
-    <header className="z-50">
-      <Topbar data={data.topBar} />
+    <WrapperStyles as="header" styles={data.styles}>
+      {renderedTopbar}
       {/* main nav */}
-      <MainNav data={data} />
+      <MainNav data={data} renderedMenus={renderedMenus} />
       <AnimatePresence>
         {showStickyNav && (
           <motion.div
@@ -32,17 +35,21 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             animate={{ top: 0 }}
             exit={{ top: -50 }}
           >
-            <MainNav data={data} />
+            <MainNav data={data} renderedMenus={renderedMenus} />
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </WrapperStyles>
   )
 }
-const MainNav: React.FC<HeaderClientProps> = ({ data }) => {
+type MainNavProps = {
+  data: Header
+  renderedMenus: (React.JSX.Element | null | undefined)[] | undefined
+}
+const MainNav: React.FC<MainNavProps> = ({ data, renderedMenus }) => {
   const refAnchor = useRef<HTMLDivElement>(null)
   return (
-    <div className={`bg-secondary`}>
+    <div className="main-nav">
       <div
         className="container flex items-center justify-between "
         // {...(theme ? { 'data-theme': theme } : {})}
@@ -51,7 +58,7 @@ const MainNav: React.FC<HeaderClientProps> = ({ data }) => {
           <div className="flex justify-between">
             <nav className="">
               {/* @ts-expect-error */}
-              <HeaderNav data={data} header={refAnchor} />
+              <HeaderNav data={data} header={refAnchor} renderedMenus={renderedMenus} />
             </nav>
           </div>
           <Link href="/search" className="flex items-center">

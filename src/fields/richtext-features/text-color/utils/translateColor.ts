@@ -1,20 +1,20 @@
-import canUseDOM from '@/utilities/canUseDOM';
+import canUseDOM from '@/utilities/canUseDOM'
 import { ColorTranslator, HSLObject, RGBObject } from 'colortranslator'
 
-export function checkValidColor(color:string) {
-    if(!canUseDOM) return false
-    var e = document.getElementById('divValidColor');
-    if (!e) {
-        e = document.createElement('div');
-        e.id = 'divValidColor';
-    }
-    e.style.borderColor = '';
-    e.style.borderColor = color;
-    var tmpcolor = e.style.borderColor;
-    if (tmpcolor.length == 0) {
-        return false;
-    }
-    return true;
+export function checkValidColor(color: string) {
+  if (!canUseDOM) return false
+  let e = document.getElementById('divValidColor')
+  if (!e) {
+    e = document.createElement('div')
+    e.id = 'divValidColor'
+  }
+  e.style.borderColor = ''
+  e.style.borderColor = color
+  const tmpcolor = e.style.borderColor
+  if (tmpcolor.length == 0) {
+    return false
+  }
+  return true
 }
 function isHSLObject(obj: any): obj is HSLObject {
   return obj && typeof obj.H === 'number' && typeof obj.S === 'number' && typeof obj.L === 'number'
@@ -29,21 +29,19 @@ export function translateColor(
   color: string | HSLObject | RGBObject,
   translateTo: 'HEX' | 'HSLstring' | 'RGBstring',
   decimals?: number,
-): string 
-
+): string
 
 export function translateColor(
   color: string | RGBObject | HSLObject,
   translateTo: 'RGB',
   decimals?: number,
-): { R: number; G: number; B: number } 
-
+): { R: number; G: number; B: number }
 
 export function translateColor(
   color: string | HSLObject | RGBObject,
   translateTo: 'HSL',
   decimals?: number,
-): { H: number; S: number; L: number } 
+): { H: number; S: number; L: number }
 
 // Implement the function
 export function translateColor(

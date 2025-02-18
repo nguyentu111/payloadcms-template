@@ -1,20 +1,27 @@
 import React from 'react'
 
-import { ArchiveCarouselBlock as ArchiveCarouselBlockProps, Post } from '@/payload-types'
+import { ArchiveCarouselBlock as ArchiveCarouselBlockProps, Page, Post } from '@/payload-types'
 import { getPayload } from 'payload'
-import RichText from '@/components/RichText'
 import configPromise from '@payload-config'
 import { CollectionArchiveCarousel } from '@/components/CollectionArchiveCarousel'
+import { WrapperStyles } from '@/components/WrapperStyles'
+import RichText from '@/components/RichText'
 
-export const ArchiveCarouselBlock = async (props: ArchiveCarouselBlockProps) => {
+export const ArchiveCarouselBlock = async (
+  props: ArchiveCarouselBlockProps & { doc: Page | Post },
+) => {
   const {
     id,
-    categories,
-    introContent,
-    limit: limitFromProps,
-    populateBy,
-    selectedDocs,
-    slidePerViewport,
+    content: {
+      categories,
+      introContent,
+      limit: limitFromProps,
+      populateBy,
+      selectedDocs,
+      slidePerViewport,
+    },
+    styles,
+    doc,
   } = props
 
   const limit = limitFromProps || 3
@@ -55,13 +62,12 @@ export const ArchiveCarouselBlock = async (props: ArchiveCarouselBlockProps) => 
     }
   }
   return (
-    <div className="relative w-full container my-16">
+    <WrapperStyles styles={styles}>
       {introContent && (
-        <div className=" mb-16 w-full">
-          <RichText className="max-w-[48rem] prose-xs" data={introContent} enableGutter={false} />
-        </div>
+        <RichText data={introContent} enableGutter={false} className="mb-8 lg:mb-16" />
       )}
+
       <CollectionArchiveCarousel posts={posts} slidePerViewport={slidePerViewport} />
-    </div>
+    </WrapperStyles>
   )
 }

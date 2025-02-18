@@ -17,8 +17,8 @@ export interface Config {
     categories: Category;
     users: User;
     'single-pages': SinglePage;
-    'post-types': PostType;
     repeaters: Repeater;
+    templates: Template;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -36,8 +36,8 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'single-pages': SinglePagesSelect<false> | SinglePagesSelect<true>;
-    'post-types': PostTypesSelect<false> | PostTypesSelect<true>;
     repeaters: RepeatersSelect<false> | RepeatersSelect<true>;
+    templates: TemplatesSelect<false> | TemplatesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -51,12 +51,12 @@ export interface Config {
     defaultIDType: string;
   };
   globals: {
-    header: Header;
     footer: Footer;
+    header: Header;
   };
   globalsSelect: {
-    header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    header: HeaderSelect<false> | HeaderSelect<true>;
   };
   locale: null;
   user: User & {
@@ -142,14 +142,21 @@ export interface Page {
     media?: (string | null) | Media;
   };
   layout: (
-    | CallToActionBlock
-    | ContentBlock
-    | MediaBlock
-    | ArchiveBlock
-    | FormBlock
+    | BannerBlock
     | BreadCrumbBlock
+    | CallToActionBlock
+    | CodeBlock
+    | FormBlock
     | HeroBlock
+    | MediaBlock
+    | PostAttributesBlock
+    | TextBlock
+    | TemplateBlock
+    | LinkBlock
+    | RichTextBlock
+    | ArchiveBlock
     | ArchiveCarouselBlock
+    | RowBlockType
   )[];
   meta?: {
     title?: string | null;
@@ -162,6 +169,15 @@ export interface Page {
   publishedAt?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
+  parent?: (string | null) | Page;
+  breadcrumbs?:
+    | {
+        doc?: (string | null) | Page;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -191,7 +207,6 @@ export interface Post {
   };
   relatedPosts?: (string | Post)[] | null;
   categories?: (string | Category)[] | null;
-  postType?: (string | null) | PostType;
   meta?: {
     title?: string | null;
     /**
@@ -329,18 +344,6 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "post-types".
- */
-export interface PostType {
-  id: string;
-  title?: string | null;
-  slug: string;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -359,168 +362,143 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock".
+ */
+export interface BannerBlock {
+  content: {
+    style: 'info' | 'warning' | 'error' | 'success';
+    content: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+  };
+  styles?: {
+    customCss?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'banner';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BreadCrumbBlock".
+ */
+export interface BreadCrumbBlock {
+  content?: {};
+  styles?: {
+    customCss?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'breadCrumb';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "CallToActionBlock".
  */
 export interface CallToActionBlock {
-  richText?: {
-    root: {
-      type: string;
-      children: {
+  content?: {
+    richText?: {
+      root: {
         type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
         version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+      };
+      [k: string]: unknown;
+    } | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  styles?: {
+    customCss?: string | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock".
+ * via the `definition` "CodeBlock".
  */
-export interface ContentBlock {
-  columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            type: string;
-            children: {
-              type: string;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+export interface CodeBlock {
+  content: {
+    language?: ('typescript' | 'javascript' | 'css') | null;
+    code: string;
+  };
+  styles?: {
+    customCss?: string | null;
+  };
   id?: string | null;
   blockName?: string | null;
-  blockType: 'content';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
- */
-export interface MediaBlock {
-  media: string | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock".
- */
-export interface ArchiveBlock {
-  introContent?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
-  limit?: number | null;
-  selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: string | Post;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'archive';
+  blockType: 'code';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: string | Form;
-  enableIntro?: boolean | null;
-  introContent?: {
-    root: {
-      type: string;
-      children: {
+  content: {
+    form: string | Form;
+    enableIntro?: boolean | null;
+    introContent?: {
+      root: {
         type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
         version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  styles?: {
+    customCss?: string | null;
+  };
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -700,53 +678,48 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BreadCrumbBlock".
- */
-export interface BreadCrumbBlock {
-  haveContainer?: boolean | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'breadCrumb';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "HeroBlock".
  */
 export interface HeroBlock {
-  image: string | Media;
-  content?: {
-    root: {
-      type: string;
-      children: {
+  content: {
+    image: string | Media;
+    content?: {
+      root: {
         type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
         version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
     };
-    [k: string]: unknown;
-  } | null;
-  link: {
-    type?: ('reference' | 'custom') | null;
-    newTab?: boolean | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: string | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: string | Post;
-        } | null);
-    url?: string | null;
-    label: string;
-    /**
-     * Choose how the link should be rendered.
-     */
-    appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
+  };
+  styles?: {
+    customCss?: string | null;
   };
   id?: string | null;
   blockName?: string | null;
@@ -754,125 +727,155 @@ export interface HeroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveCarouselBlock".
+ * via the `definition` "MediaBlock".
  */
-export interface ArchiveCarouselBlock {
-  slidePerViewport: {
-    mobile: number;
-    tablet: number;
-    pc: number;
+export interface MediaBlock {
+  content: {
+    media: string | Media;
   };
-  introContent?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
-  limit?: number | null;
-  selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: string | Post;
-      }[]
-    | null;
+  styles?: {
+    customCss?: string | null;
+  };
   id?: string | null;
   blockName?: string | null;
-  blockType: 'archiveCarousel';
+  blockType: 'mediaBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "single-pages".
+ * via the `definition` "PostAttributesBlock".
  */
-export interface SinglePage {
+export interface PostAttributesBlock {
+  content: {
+    attribute: 'title' | 'publishedAt' | 'populatedAuthors' | 'content';
+  };
+  styles?: {
+    customCss?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postAttributes';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextBlock".
+ */
+export interface TextBlock {
+  content?: {
+    text?: string | null;
+  };
+  styles?: {
+    customCss?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'text';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TemplateBlock".
+ */
+export interface TemplateBlock {
+  content?: {
+    template?: (string | null) | Template;
+  };
+  styles?: {
+    customCss?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'template';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "templates".
+ */
+export interface Template {
   id: string;
-  postTypes: (string | PostType)[];
-  blocks: (
-    | BannerBlock
-    | BreadCrumbBlock
-    | CallToActionBlock
-    | CodeBlock
-    | ContentBlock
-    | FormBlock
-    | HeroBlock
-    | MediaBlock
-    | RichTextBlock
-    | PostTitleBlock
-    | PostContentBlock
-    | PostAttributesBlock
-    | RowBlockType
-    | ArchiveBlock
-    | ArchiveCarouselBlock
-  )[];
+  name: string;
+  blocks?:
+    | (
+        | BannerBlock
+        | BreadCrumbBlock
+        | CallToActionBlock
+        | CodeBlock
+        | FormBlock
+        | HeroBlock
+        | MediaBlock
+        | PostAttributesBlock
+        | TextBlock
+        | TemplateBlock
+        | LinkBlock
+        | RichTextBlock
+        | ArchiveBlock
+        | ArchiveCarouselBlock
+        | RowBlockType
+      )[]
+    | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
+ * via the `definition` "LinkBlock".
  */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
+export interface LinkBlock {
   content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
+    link: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+      label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
     };
-    [k: string]: unknown;
+  };
+  styles?: {
+    customCss?: string | null;
   };
   id?: string | null;
   blockName?: string | null;
-  blockType: 'banner';
+  blockType: 'link';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "richTextBlock".
+ * via the `definition` "RichTextBlock".
  */
 export interface RichTextBlock {
-  richText: {
-    root: {
-      type: string;
-      children: {
+  content: {
+    enableProse?: boolean | null;
+    enableGutter?: boolean | null;
+    richText: {
+      root: {
         type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
         version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
+      };
+      [k: string]: unknown;
     };
-    [k: string]: unknown;
+  };
+  styles?: {
+    customCss?: string | null;
   };
   id?: string | null;
   blockName?: string | null;
@@ -880,276 +883,143 @@ export interface RichTextBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PostTitleBlock".
+ * via the `definition` "ArchiveBlock".
  */
-export interface PostTitleBlock {
-  content?: {};
-  styles?: {
-    mobile?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-    tablet?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-    pc?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'postTitle';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PostContentBlock".
- */
-export interface PostContentBlock {
-  content?: {};
-  styles?: {
-    mobile?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-    tablet?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-    pc?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'postContent';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PostAttributesBlock".
- */
-export interface PostAttributesBlock {
+export interface ArchiveBlock {
   content?: {
-    attribute?: ('publishedAt' | 'author' | 'categories' | '_status' | 'postType')[] | null;
-    repeater?: (string | null) | Repeater;
+    introContent?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    populateBy?: ('collection' | 'selection') | null;
+    relationTo?: 'posts' | null;
+    categories?: (string | Category)[] | null;
+    limit?: number | null;
+    selectedDocs?:
+      | {
+          relationTo: 'posts';
+          value: string | Post;
+        }[]
+      | null;
   };
   styles?: {
-    mobile?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-    tablet?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-    pc?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
+    customCss?: string | null;
   };
   id?: string | null;
   blockName?: string | null;
-  blockType: 'postAttributes';
+  blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveCarouselBlock".
+ */
+export interface ArchiveCarouselBlock {
+  content: {
+    slidePerViewport: {
+      mobile: number;
+      tablet: number;
+      pc: number;
+    };
+    introContent?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    populateBy?: ('collection' | 'selection') | null;
+    relationTo?: 'posts' | null;
+    categories?: (string | Category)[] | null;
+    limit?: number | null;
+    selectedDocs?:
+      | {
+          relationTo: 'posts';
+          value: string | Post;
+        }[]
+      | null;
+  };
+  styles?: {
+    customCss?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'archiveCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rowBlockType".
+ */
+export interface RowBlockType {
+  content: {
+    blocks: (
+      | BannerBlock
+      | BreadCrumbBlock
+      | CallToActionBlock
+      | CodeBlock
+      | FormBlock
+      | HeroBlock
+      | MediaBlock
+      | RichTextBlock
+      | PostAttributesBlock
+      | TextBlock
+      | LinkBlock
+      | ArchiveCarouselBlock
+      | ArchiveBlock
+      | RowBlockType
+    )[];
+  };
+  styles?: {
+    customCss?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'container';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "single-pages".
+ */
+export interface SinglePage {
+  id: string;
+  postTypes?: 'posts'[] | null;
+  blocks: (
+    | BannerBlock
+    | BreadCrumbBlock
+    | CallToActionBlock
+    | CodeBlock
+    | FormBlock
+    | HeroBlock
+    | MediaBlock
+    | PostAttributesBlock
+    | TextBlock
+    | TemplateBlock
+    | LinkBlock
+    | RichTextBlock
+    | ArchiveBlock
+    | ArchiveCarouselBlock
+    | RowBlockType
+  )[];
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1167,123 +1037,6 @@ export interface Repeater {
     | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rowBlockType".
- */
-export interface RowBlockType {
-  content: {
-    layoutType: 'grid' | 'flex';
-    gridOptions?: {
-      columns?: ('2' | '3' | '4' | '6') | null;
-      gap?: ('2' | '4' | '6' | '8') | null;
-      rowGap?: ('2' | '4' | '6' | '8') | null;
-    };
-    flexOptions?: {
-      direction?: ('row' | 'column') | null;
-      justifyContent?: ('start' | 'center' | 'end' | 'between' | 'around') | null;
-      alignItems?: ('start' | 'center' | 'end' | 'stretch') | null;
-      gap?: ('2' | '4' | '6' | '8') | null;
-    };
-    blocks: (
-      | BannerBlock
-      | BreadCrumbBlock
-      | CallToActionBlock
-      | CodeBlock
-      | ContentBlock
-      | FormBlock
-      | HeroBlock
-      | MediaBlock
-      | RichTextBlock
-      | PostTitleBlock
-      | PostContentBlock
-      | PostAttributesBlock
-    )[];
-  };
-  styles?: {
-    mobile?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-    tablet?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-    pc?: {
-      margin?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      padding?: {
-        top?: string | null;
-        bottom?: string | null;
-        left?: string | null;
-        right?: string | null;
-      };
-      width?: ('full' | 'fitContent' | 'container' | 'content' | 'title' | 'auto') | null;
-      alignSelf?: ('start' | 'center' | 'end' | 'baseline' | 'stretch') | null;
-      fontSize?: string | null;
-      textAlign?: ('center' | 'left' | 'right' | 'justify') | null;
-      /**
-       * Use "hsl(var(...))" to reference to saved variable colors.
-       */
-      textColor?: string | null;
-      fontWeight?: number | null;
-      display?: ('block' | 'inline' | 'inline-block' | 'none') | null;
-      position?: ('static' | 'relative' | 'absolute' | 'fixed') | null;
-      zIndex?: number | null;
-    };
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'row';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1487,12 +1240,12 @@ export interface PayloadLockedDocument {
         value: string | SinglePage;
       } | null)
     | ({
-        relationTo: 'post-types';
-        value: string | PostType;
-      } | null)
-    | ({
         relationTo: 'repeaters';
         value: string | Repeater;
+      } | null)
+    | ({
+        relationTo: 'templates';
+        value: string | Template;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1587,14 +1340,21 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        cta?: T | CallToActionBlockSelect<T>;
-        content?: T | ContentBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
-        archive?: T | ArchiveBlockSelect<T>;
-        formBlock?: T | FormBlockSelect<T>;
+        banner?: T | BannerBlockSelect<T>;
         breadCrumb?: T | BreadCrumbBlockSelect<T>;
+        cta?: T | CallToActionBlockSelect<T>;
+        code?: T | CodeBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
         hero?: T | HeroBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        postAttributes?: T | PostAttributesBlockSelect<T>;
+        text?: T | TextBlockSelect<T>;
+        template?: T | TemplateBlockSelect<T>;
+        link?: T | LinkBlockSelect<T>;
+        richText?: T | RichTextBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
         archiveCarousel?: T | ArchiveCarouselBlockSelect<T>;
+        container?: T | RowBlockTypeSelect<T>;
       };
   meta?:
     | T
@@ -1606,45 +1366,134 @@ export interface PagesSelect<T extends boolean = true> {
   publishedAt?: T;
   slug?: T;
   slugLock?: T;
+  parent?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock_select".
+ * via the `definition` "BannerBlock_select".
  */
-export interface CallToActionBlockSelect<T extends boolean = true> {
-  richText?: T;
-  links?:
+export interface BannerBlockSelect<T extends boolean = true> {
+  content?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
+        style?: T;
+        content?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
       };
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock_select".
+ * via the `definition` "BreadCrumbBlock_select".
  */
-export interface ContentBlockSelect<T extends boolean = true> {
-  columns?:
+export interface BreadCrumbBlockSelect<T extends boolean = true> {
+  content?: T | {};
+  styles?:
     | T
     | {
-        size?: T;
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionBlock_select".
+ */
+export interface CallToActionBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
         richText?: T;
-        enableLink?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock_select".
+ */
+export interface CodeBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        language?: T;
+        code?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FormBlock_select".
+ */
+export interface FormBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        form?: T;
+        enableIntro?: T;
+        introContent?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock_select".
+ */
+export interface HeroBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        image?: T;
+        content?: T;
         link?:
           | T
           | {
@@ -1655,7 +1504,11 @@ export interface ContentBlockSelect<T extends boolean = true> {
               label?: T;
               appearance?: T;
             };
-        id?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
       };
   id?: T;
   blockName?: T;
@@ -1665,7 +1518,117 @@ export interface ContentBlockSelect<T extends boolean = true> {
  * via the `definition` "MediaBlock_select".
  */
 export interface MediaBlockSelect<T extends boolean = true> {
-  media?: T;
+  content?:
+    | T
+    | {
+        media?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostAttributesBlock_select".
+ */
+export interface PostAttributesBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        attribute?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TextBlock_select".
+ */
+export interface TextBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        text?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TemplateBlock_select".
+ */
+export interface TemplateBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        template?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LinkBlock_select".
+ */
+export interface LinkBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RichTextBlock_select".
+ */
+export interface RichTextBlockSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        enableProse?: T;
+        enableGutter?: T;
+        richText?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1674,51 +1637,20 @@ export interface MediaBlockSelect<T extends boolean = true> {
  * via the `definition` "ArchiveBlock_select".
  */
 export interface ArchiveBlockSelect<T extends boolean = true> {
-  introContent?: T;
-  populateBy?: T;
-  relationTo?: T;
-  categories?: T;
-  limit?: T;
-  selectedDocs?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FormBlock_select".
- */
-export interface FormBlockSelect<T extends boolean = true> {
-  form?: T;
-  enableIntro?: T;
-  introContent?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BreadCrumbBlock_select".
- */
-export interface BreadCrumbBlockSelect<T extends boolean = true> {
-  haveContainer?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroBlock_select".
- */
-export interface HeroBlockSelect<T extends boolean = true> {
-  image?: T;
-  content?: T;
-  link?:
+  content?:
     | T
     | {
-        type?: T;
-        newTab?: T;
-        reference?: T;
-        url?: T;
-        label?: T;
-        appearance?: T;
+        introContent?: T;
+        populateBy?: T;
+        relationTo?: T;
+        categories?: T;
+        limit?: T;
+        selectedDocs?: T;
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
       };
   id?: T;
   blockName?: T;
@@ -1728,19 +1660,63 @@ export interface HeroBlockSelect<T extends boolean = true> {
  * via the `definition` "ArchiveCarouselBlock_select".
  */
 export interface ArchiveCarouselBlockSelect<T extends boolean = true> {
-  slidePerViewport?:
+  content?:
     | T
     | {
-        mobile?: T;
-        tablet?: T;
-        pc?: T;
+        slidePerViewport?:
+          | T
+          | {
+              mobile?: T;
+              tablet?: T;
+              pc?: T;
+            };
+        introContent?: T;
+        populateBy?: T;
+        relationTo?: T;
+        categories?: T;
+        limit?: T;
+        selectedDocs?: T;
       };
-  introContent?: T;
-  populateBy?: T;
-  relationTo?: T;
-  categories?: T;
-  limit?: T;
-  selectedDocs?: T;
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rowBlockType_select".
+ */
+export interface RowBlockTypeSelect<T extends boolean = true> {
+  content?:
+    | T
+    | {
+        blocks?:
+          | T
+          | {
+              banner?: T | BannerBlockSelect<T>;
+              breadCrumb?: T | BreadCrumbBlockSelect<T>;
+              cta?: T | CallToActionBlockSelect<T>;
+              code?: T | CodeBlockSelect<T>;
+              formBlock?: T | FormBlockSelect<T>;
+              hero?: T | HeroBlockSelect<T>;
+              mediaBlock?: T | MediaBlockSelect<T>;
+              richText?: T | RichTextBlockSelect<T>;
+              postAttributes?: T | PostAttributesBlockSelect<T>;
+              text?: T | TextBlockSelect<T>;
+              link?: T | LinkBlockSelect<T>;
+              archiveCarousel?: T | ArchiveCarouselBlockSelect<T>;
+              archive?: T | ArchiveBlockSelect<T>;
+              container?: T | RowBlockTypeSelect<T>;
+            };
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1754,7 +1730,6 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   relatedPosts?: T;
   categories?: T;
-  postType?: T;
   meta?:
     | T
     | {
@@ -1918,498 +1893,18 @@ export interface SinglePagesSelect<T extends boolean = true> {
         breadCrumb?: T | BreadCrumbBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         code?: T | CodeBlockSelect<T>;
-        content?: T | ContentBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         hero?: T | HeroBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
-        richText?: T | RichTextBlockSelect<T>;
-        postTitle?: T | PostTitleBlockSelect<T>;
-        postContent?: T | PostContentBlockSelect<T>;
         postAttributes?: T | PostAttributesBlockSelect<T>;
-        row?: T | RowBlockTypeSelect<T>;
+        text?: T | TextBlockSelect<T>;
+        template?: T | TemplateBlockSelect<T>;
+        link?: T | LinkBlockSelect<T>;
+        richText?: T | RichTextBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         archiveCarousel?: T | ArchiveCarouselBlockSelect<T>;
+        container?: T | RowBlockTypeSelect<T>;
       };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock_select".
- */
-export interface BannerBlockSelect<T extends boolean = true> {
-  style?: T;
-  content?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock_select".
- */
-export interface CodeBlockSelect<T extends boolean = true> {
-  language?: T;
-  code?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "richTextBlock_select".
- */
-export interface RichTextBlockSelect<T extends boolean = true> {
-  richText?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PostTitleBlock_select".
- */
-export interface PostTitleBlockSelect<T extends boolean = true> {
-  content?: T | {};
-  styles?:
-    | T
-    | {
-        mobile?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-        tablet?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-        pc?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PostContentBlock_select".
- */
-export interface PostContentBlockSelect<T extends boolean = true> {
-  content?: T | {};
-  styles?:
-    | T
-    | {
-        mobile?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-        tablet?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-        pc?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PostAttributesBlock_select".
- */
-export interface PostAttributesBlockSelect<T extends boolean = true> {
-  content?:
-    | T
-    | {
-        attribute?: T;
-        repeater?: T;
-      };
-  styles?:
-    | T
-    | {
-        mobile?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-        tablet?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-        pc?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rowBlockType_select".
- */
-export interface RowBlockTypeSelect<T extends boolean = true> {
-  content?:
-    | T
-    | {
-        layoutType?: T;
-        gridOptions?:
-          | T
-          | {
-              columns?: T;
-              gap?: T;
-              rowGap?: T;
-            };
-        flexOptions?:
-          | T
-          | {
-              direction?: T;
-              justifyContent?: T;
-              alignItems?: T;
-              gap?: T;
-            };
-        blocks?:
-          | T
-          | {
-              banner?: T | BannerBlockSelect<T>;
-              breadCrumb?: T | BreadCrumbBlockSelect<T>;
-              cta?: T | CallToActionBlockSelect<T>;
-              code?: T | CodeBlockSelect<T>;
-              content?: T | ContentBlockSelect<T>;
-              formBlock?: T | FormBlockSelect<T>;
-              hero?: T | HeroBlockSelect<T>;
-              mediaBlock?: T | MediaBlockSelect<T>;
-              richText?: T | RichTextBlockSelect<T>;
-              postTitle?: T | PostTitleBlockSelect<T>;
-              postContent?: T | PostContentBlockSelect<T>;
-              postAttributes?: T | PostAttributesBlockSelect<T>;
-            };
-      };
-  styles?:
-    | T
-    | {
-        mobile?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-        tablet?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-        pc?:
-          | T
-          | {
-              margin?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              padding?:
-                | T
-                | {
-                    top?: T;
-                    bottom?: T;
-                    left?: T;
-                    right?: T;
-                  };
-              width?: T;
-              alignSelf?: T;
-              fontSize?: T;
-              textAlign?: T;
-              textColor?: T;
-              fontWeight?: T;
-              display?: T;
-              position?: T;
-              zIndex?: T;
-            };
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "post-types_select".
- */
-export interface PostTypesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  slugLock?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2428,6 +1923,37 @@ export interface RepeatersSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "templates_select".
+ */
+export interface TemplatesSelect<T extends boolean = true> {
+  name?: T;
+  blocks?:
+    | T
+    | {
+        banner?: T | BannerBlockSelect<T>;
+        breadCrumb?: T | BreadCrumbBlockSelect<T>;
+        cta?: T | CallToActionBlockSelect<T>;
+        code?: T | CodeBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
+        hero?: T | HeroBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        postAttributes?: T | PostAttributesBlockSelect<T>;
+        text?: T | TextBlockSelect<T>;
+        template?: T | TemplateBlockSelect<T>;
+        link?: T | LinkBlockSelect<T>;
+        richText?: T | RichTextBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
+        archiveCarousel?: T | ArchiveCarouselBlockSelect<T>;
+        container?: T | RowBlockTypeSelect<T>;
+      };
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2684,156 +2210,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header".
- */
-export interface Header {
-  id: string;
-  topBar?: {
-    officeLocation: string;
-    phone: string;
-    hotline: string;
-    email: string;
-    suportLink: {
-      type?: ('reference' | 'custom') | null;
-      newTab?: boolean | null;
-      reference?:
-        | ({
-            relationTo: 'pages';
-            value: string | Page;
-          } | null)
-        | ({
-            relationTo: 'posts';
-            value: string | Post;
-          } | null);
-      url?: string | null;
-      label: string;
-      /**
-       * Choose how the link should be rendered.
-       */
-      appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
-    };
-  };
-  navItems?: {
-    items?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: string | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: string | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-            /**
-             * Choose how the link should be rendered.
-             */
-            appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
-          };
-          menu?: {
-            addMenu?: boolean | null;
-            anchoringToHeader?: boolean | null;
-            leftSidebar?: {
-              groups?:
-                | {
-                    title?: string | null;
-                    links?:
-                      | {
-                          link: {
-                            type?: ('reference' | 'custom') | null;
-                            newTab?: boolean | null;
-                            reference?:
-                              | ({
-                                  relationTo: 'pages';
-                                  value: string | Page;
-                                } | null)
-                              | ({
-                                  relationTo: 'posts';
-                                  value: string | Post;
-                                } | null);
-                            url?: string | null;
-                            label: string;
-                            /**
-                             * Choose how the link should be rendered.
-                             */
-                            appearance?:
-                              | ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive')
-                              | null;
-                          };
-                          id?: string | null;
-                        }[]
-                      | null;
-                    id?: string | null;
-                  }[]
-                | null;
-            };
-            main?: {
-              groups?:
-                | {
-                    title?: string | null;
-                    linkGroup?: {
-                      links?:
-                        | {
-                            link: {
-                              type?: ('reference' | 'custom') | null;
-                              newTab?: boolean | null;
-                              reference?:
-                                | ({
-                                    relationTo: 'pages';
-                                    value: string | Page;
-                                  } | null)
-                                | ({
-                                    relationTo: 'posts';
-                                    value: string | Post;
-                                  } | null);
-                              url?: string | null;
-                              label: string;
-                              /**
-                               * Choose how the link should be rendered.
-                               */
-                              appearance?:
-                                | ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive')
-                                | null;
-                            };
-                            id?: string | null;
-                          }[]
-                        | null;
-                    };
-                    posts?: {
-                      colections?:
-                        | {
-                            reference:
-                              | {
-                                  relationTo: 'pages';
-                                  value: string | Page;
-                                }
-                              | {
-                                  relationTo: 'posts';
-                                  value: string | Post;
-                                };
-                            id?: string | null;
-                          }[]
-                        | null;
-                    };
-                    id?: string | null;
-                  }[]
-                | null;
-            };
-          };
-          id?: string | null;
-        }[]
-      | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
@@ -2863,119 +2239,86 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header_select".
+ * via the `definition` "header".
  */
-export interface HeaderSelect<T extends boolean = true> {
-  topBar?:
-    | T
-    | {
-        officeLocation?: T;
-        phone?: T;
-        hotline?: T;
-        email?: T;
-        suportLink?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-      };
-  navItems?:
-    | T
-    | {
-        items?:
-          | T
-          | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                    appearance?: T;
-                  };
-              menu?:
-                | T
-                | {
-                    addMenu?: T;
-                    anchoringToHeader?: T;
-                    leftSidebar?:
-                      | T
-                      | {
-                          groups?:
-                            | T
-                            | {
-                                title?: T;
-                                links?:
-                                  | T
-                                  | {
-                                      link?:
-                                        | T
-                                        | {
-                                            type?: T;
-                                            newTab?: T;
-                                            reference?: T;
-                                            url?: T;
-                                            label?: T;
-                                            appearance?: T;
-                                          };
-                                      id?: T;
-                                    };
-                                id?: T;
-                              };
-                        };
-                    main?:
-                      | T
-                      | {
-                          groups?:
-                            | T
-                            | {
-                                title?: T;
-                                linkGroup?:
-                                  | T
-                                  | {
-                                      links?:
-                                        | T
-                                        | {
-                                            link?:
-                                              | T
-                                              | {
-                                                  type?: T;
-                                                  newTab?: T;
-                                                  reference?: T;
-                                                  url?: T;
-                                                  label?: T;
-                                                  appearance?: T;
-                                                };
-                                            id?: T;
-                                          };
-                                    };
-                                posts?:
-                                  | T
-                                  | {
-                                      colections?:
-                                        | T
-                                        | {
-                                            reference?: T;
-                                            id?: T;
-                                          };
-                                    };
-                                id?: T;
-                              };
-                        };
-                  };
-              id?: T;
-            };
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+export interface Header {
+  id: string;
+  topBar?: {
+    blocks?:
+      | (
+          | BannerBlock
+          | BreadCrumbBlock
+          | CallToActionBlock
+          | CodeBlock
+          | FormBlock
+          | HeroBlock
+          | MediaBlock
+          | PostAttributesBlock
+          | TextBlock
+          | TemplateBlock
+          | LinkBlock
+          | RichTextBlock
+          | ArchiveBlock
+          | ArchiveCarouselBlock
+          | RowBlockType
+        )[]
+      | null;
+  };
+  navItems?: {
+    items?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: string | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: string | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline' | 'ghost' | 'link' | 'secondary' | 'destructive') | null;
+          };
+          menu?: {
+            anchoringToHeader?: boolean | null;
+            blocks?:
+              | (
+                  | BannerBlock
+                  | BreadCrumbBlock
+                  | CallToActionBlock
+                  | CodeBlock
+                  | FormBlock
+                  | HeroBlock
+                  | MediaBlock
+                  | PostAttributesBlock
+                  | TextBlock
+                  | TemplateBlock
+                  | LinkBlock
+                  | RichTextBlock
+                  | RowBlockType
+                )[]
+              | null;
+          };
+          styles?: {
+            customCss?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  styles?: {
+    customCss?: string | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -3002,6 +2345,90 @@ export interface FooterSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  topBar?:
+    | T
+    | {
+        blocks?:
+          | T
+          | {
+              banner?: T | BannerBlockSelect<T>;
+              breadCrumb?: T | BreadCrumbBlockSelect<T>;
+              cta?: T | CallToActionBlockSelect<T>;
+              code?: T | CodeBlockSelect<T>;
+              formBlock?: T | FormBlockSelect<T>;
+              hero?: T | HeroBlockSelect<T>;
+              mediaBlock?: T | MediaBlockSelect<T>;
+              postAttributes?: T | PostAttributesBlockSelect<T>;
+              text?: T | TextBlockSelect<T>;
+              template?: T | TemplateBlockSelect<T>;
+              link?: T | LinkBlockSelect<T>;
+              richText?: T | RichTextBlockSelect<T>;
+              archive?: T | ArchiveBlockSelect<T>;
+              archiveCarousel?: T | ArchiveCarouselBlockSelect<T>;
+              container?: T | RowBlockTypeSelect<T>;
+            };
+      };
+  navItems?:
+    | T
+    | {
+        items?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              menu?:
+                | T
+                | {
+                    anchoringToHeader?: T;
+                    blocks?:
+                      | T
+                      | {
+                          banner?: T | BannerBlockSelect<T>;
+                          breadCrumb?: T | BreadCrumbBlockSelect<T>;
+                          cta?: T | CallToActionBlockSelect<T>;
+                          code?: T | CodeBlockSelect<T>;
+                          formBlock?: T | FormBlockSelect<T>;
+                          hero?: T | HeroBlockSelect<T>;
+                          mediaBlock?: T | MediaBlockSelect<T>;
+                          postAttributes?: T | PostAttributesBlockSelect<T>;
+                          text?: T | TextBlockSelect<T>;
+                          template?: T | TemplateBlockSelect<T>;
+                          link?: T | LinkBlockSelect<T>;
+                          richText?: T | RichTextBlockSelect<T>;
+                          container?: T | RowBlockTypeSelect<T>;
+                        };
+                  };
+              styles?:
+                | T
+                | {
+                    customCss?: T;
+                  };
+              id?: T;
+            };
+      };
+  styles?:
+    | T
+    | {
+        customCss?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskSchedulePublish".
  */
 export interface TaskSchedulePublish {
@@ -3016,8 +2443,12 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'templates';
+          value: string | Template;
         } | null);
-    global?: string | null;
+    global?: 'header' | null;
     user?: (string | null) | User;
   };
   output?: unknown;

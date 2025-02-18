@@ -73,7 +73,7 @@ export class VimeoNode extends EmbedNode {
       }
     }
 
-    return VimeoComponent({ id: this.__id, className })
+    return VimeoComponent({ id: this.__id })
   }
 
   exportJSON(): SerializedEmbedNode {

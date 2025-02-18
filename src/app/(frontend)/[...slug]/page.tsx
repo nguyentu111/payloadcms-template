@@ -6,7 +6,7 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 
-import type { Page as PageType, PostType, SinglePage } from '@/payload-types'
+import type { Page as PageType, SinglePage } from '@/payload-types'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { RenderHero } from '@/heros/RenderHero'
@@ -43,9 +43,8 @@ export async function generateStaticParams() {
     .map(({ slug }) => {
       return { slug: [slug] }
     })
-  const postsParams = posts.docs.map(({ slug, postType }) => {
-    const _postType: string = postType ? (postType as PostType).slug : ''
-    return { slug: _postType ? [_postType, slug] : [slug] }
+  const postsParams = posts.docs.map(({ slug }) => {
+    return { slug: [slug] }
   })
   return [...pagesParams, ...postsParams]
 }
@@ -61,39 +60,34 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { slug = ['home'] } = await paramsPromise
   const _slug = slug.reduce((acc, cur) => acc + '/' + cur)
   const url = '/' + _slug
-  let page: PageType | null
-
-  page = await queryPageBySlug({
-    slug: _slug as string,
+  const page: PageType | null = await queryPageByUrl({
+    url,
   })
   if (!page) {
     const post = await queryPostBySlug({ slug: _slug })
     if (!post) return <PayloadRedirects url={url} />
-    const postType = post.postType as PostType | null
-    if (postType) {
-      const template = (await getCachedSinglePage(
-        {
-          postTypes: {
-            contains: postType.id,
-          },
+    const template = (await getCachedSinglePage(
+      {
+        postTypes: {
+          contains: 'posts',
         },
-        postType.id,
-      )()) as SinglePage
-      console.log({ template, postType })
-      if (template) {
-        return (
-          <DocumentProvider document={post}>
-            <article className="pb-16">
-              <PageClient />
-              <PayloadRedirects disableNotFound url={url} />
-              {draft && <LivePreviewListener />}
+      },
+      'posts',
+    )()) as SinglePage
+    if (template) {
+      return (
+        <DocumentProvider document={post}>
+          <article className="pb-16">
+            <PageClient />
+            <PayloadRedirects disableNotFound url={url} />
+            {draft && <LivePreviewListener />}
 
-              <RenderBlocks blocks={template.blocks} doc={post} />
-            </article>
-          </DocumentProvider>
-        )
-      }
+            <RenderBlocks blocks={template.blocks} doc={post} />
+          </article>
+        </DocumentProvider>
+      )
     }
+
     return (
       <DocumentProvider document={post}>
         <article className="pt-16 pb-16">
@@ -169,6 +163,30 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
 
   return result.docs?.[0] || null
 })
+const queryPageByUrl = cache(async ({ url }: { url: string }) => {
+  const { isEnabled: draft } = await draftMode()
+
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'pages',
+    depth: 10,
+    draft,
+    limit: 1,
+    pagination: false,
+    overrideAccess: draft,
+    where: {
+      'breadcrumbs.url': {
+        equals: url,
+      },
+      slug: {
+        equals: url.split('/').at(-1),
+      },
+    },
+  })
+
+  return result.docs?.[0] || null
+})
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
@@ -177,6 +195,7 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
 
   const result = await payload.find({
     collection: 'posts',
+    depth: 10,
     draft,
     limit: 1,
     overrideAccess: draft,
